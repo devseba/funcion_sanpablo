@@ -1,0 +1,40 @@
+<?php
+    
+    defined('BASEPATH') OR exit('No direct script access allowed');
+
+    class Modelo_login extends CI_Model {
+
+        public function __construct()
+        {
+            // Call the CI_Model constructor
+            parent::__construct();
+            $this->load->database();
+        }
+
+        public function validarUsuario($datos){
+            $usu=$datos['email'];
+            // $query = $this->db->get_where('users', $datos);
+            // if($query->num_rows()> 0){
+            //     return true;
+            // }
+            // else{
+            //     return false;
+            // }
+ $_SESSION['username']=$datos['email'];
+            $sql_user = "SELECT users.id AS idu, users.username, users.password, users.email, users.first_name, users.last_name, users_groups.user_id, users_groups.group_id, groups.id AS idg, groups.name   
+                    FROM users 
+                    JOIN users_groups ON users_groups.user_id= users.id
+                    JOIN groups ON groups.id= users_groups.group_id 
+                    WHERE groups.id = 1 AND users.username='$usu' ";
+        $query_user= $this->db->query($sql_user);
+       
+
+        if($query_user->num_rows() > 0){  // si existe el alumno.
+            // $id = $query_user->num_rows(8);
+            // $_SESSION['group_id']=$id;
+            return true;
+        }else{
+            return false;
+        }
+        }
+	}

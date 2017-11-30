@@ -1,0 +1,369 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Asientos extends CI_Model
+{
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+  // Listado de butacas
+  function asientos_List(){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca'); 
+    // $this->db->join('deta_reserva', 'deta_reserva.id_butaca = tbl_butaca.id_butaca');   
+    // $this->db->join('tbl_reserva', 'tbl_reserva.id_reserva = deta_reserva.id_reserva');  
+
+    $query = $this->db->get();
+    if ($query->num_rows()!=0){
+         return $query->result_array();
+         }     
+  }
+  // Devuelve id de relacion asiento/fila
+  function getIdAsientos($data){
+
+    $id_fila = $data['fila'];
+    $id_asiento = $data['asiento'];
+    $this->db->select('tbl_butaca.id_butaca');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.fila', $id_fila);
+    $this->db->where('tbl_butaca.nro_butaca', $id_asiento);
+    $query = $this->db->get(); 
+    $id = $query->row('id_butaca');    
+
+    if (isset($id))
+    {               
+      return $id;
+    }
+    else
+    {
+      return 0;
+    }
+  } 
+
+  // Cambia Estados en componenteequipos
+  function updateEstado($id, $estado){
+    
+    $this->db->set('estado', $estado);
+    $this->db->where('id_butaca',$id);
+    $this->db->update('tbl_butaca');
+  }
+  
+  // Info de la reserva
+  function setAsientos($data){    
+
+      $this->db->trans_start();      
+      $reserva = array(
+          'dni_alumno' => $data['dni_alumno'],  // guarda dni del alumno
+          'fecha_hora' => date('Y-m-d H:i:s'),  // fecha y hora del server
+          'id_entrada' => $data['dni_tutor'],   //guarda dni del tutor
+          'estado' => 'RE'
+      );
+      $this->db->insert('tbl_reserva', $reserva);
+      $idInsert = $this->db->insert_id();   
+      $this->db->trans_complete();
+      if ($this->db->trans_status() === FALSE){
+          return false;  
+      }
+      else{
+          return $idInsert;
+      }  
+  }
+
+  // Detalle de la reserva
+  function setDetaAsientos($id_insert,$id){    
+    // cargo estado para guardar
+    $estado = 'RE';    
+    //si trae 2 id de asiento, guarda y actualiza el estado de ambos
+    if ( count($id) == 4 ) { 
+      
+      $data = array(
+                    array(
+                        'id_reserva' => $id_insert,
+                        'id_butaca' => $id['1']
+                    ),
+                    array(
+                        'id_reserva' => $id_insert,
+                        'id_butaca' => $id['2']
+                    )
+              );
+      $this->db->insert_batch('deta_reserva', $data);      
+      $id_1 = $id['1'];
+      $this->updateEstado($id_1,$estado);
+      $id_2 = $id['2'];
+      $this->updateEstado($id_2,$estado);
+      return true;
+
+    }else{
+
+      $data = array(
+                  'id_reserva' => $id_insert,
+                  'id_butaca' => $id['1']
+              );
+      $this->db->insert('deta_reserva', $data);
+      $id_1 = $id['1'];
+      $this->updateEstado($id_1,$estado);
+      return true;
+    }
+  }
+
+  function datosfamilia($id){
+
+    $sql="SELECT  tbl_butaca.id_butaca, tbl_butaca.fila, tbl_butaca.nro_butaca, alumnos.apellido as apell, alumnos.nombre as nom, alumnos.documento as doc, alumnos.fec, alumnos.sexo, alumnos.domicilio, tutores.apellido, tutores.nombre, tutores.telefono_particular, tutores.email, tutores.fecha_nac. tutores.documento, tutor_alumno.tutor, tutor_alumno.alumno, tbl_reserva.id_reserva, tbl_reserva.dni_alumno, tbl_reserva.fecha_hora, tbl_reserva.estado
+          FROM tbl_butaca
+
+          JOIN deta_reserva ON deta_reserva.id_butaca=tbl_butaca.id_butaca
+          JOIN tbl_reserva ON tbl_reserva.id_reserva=deta_reserva.id_reserva
+          JOIN alumnos ON alumnos.documento=tbl_reserva.dni_alumno
+          JOIN tutor_alumno ON tutor_alumno.alumno=alumnos.legajo
+          JOIN tutores ON tutores.codigo=tutor_alumno.tutor
+          
+          WHERE deta_reserva.id_butaca=$id
+
+          ";
+      
+        $query= $this->db->query($sql);
+        
+      if ($query->num_rows()!=0){
+         return $query->result_array();  
+       }
+       else
+       {
+        return false;
+       }  
+  }
+
+  function getdatosreserva(){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.estado', 'RE');
+    $query = $this->db->get(); 
+
+    if($query->num_rows()>0){
+                return $query->result();
+            }
+            else{
+                return false;
+    }  
+  }   
+  function getimprimir($fila1, $asiento1){
+      
+     
+    $this->db->select('tbl_butaca.id_butaca');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.fila', $fila1);
+    $this->db->where('tbl_butaca.nro_butaca', $asiento1);
+    $query = $this->db->get(); 
+    $id = $query->row('id_butaca');    
+
+    if (isset($id))
+    {               
+      return $id;
+    }
+    else
+    {
+      return 0;
+    }
+  }  
+ 
+  function traerbutacas($dn){
+
+        $sql="SELECT  *
+        FROM tbl_reserva
+        JOIN deta_reserva ON deta_reserva.id_reserva=tbl_reserva.id_reserva
+        JOIN tbl_butaca ON tbl_butaca.id_butaca=deta_reserva.id_butaca  
+                      
+        WHERE tbl_reserva.dni_alumno=$dn AND tbl_reserva.estado='RE'
+
+      ";
+      
+      $query= $this->db->query($sql);
+
+      if ($query->num_rows()!=0){
+         return $query->result_array();  
+       }
+       else
+       {
+        return false;
+       }     
+    
+
+  }
+
+  function getdnis(){
+
+    $query= $this->db->get('tbl_reserva');
+    if($query->num_rows()>0){
+        return $query->result();
+    }
+    else{
+        return false;
+        }
+   
+  }
+  //Retorno id de reserva para la funcion anular y entregar reserva
+  function traerreserva($id){
+
+    $this->db->select('deta_reserva.id_reserva');
+    $this->db->from('tbl_butaca');     
+    $this->db->join('deta_reserva', 'deta_reserva.id_butaca = tbl_butaca.id_butaca');   
+    $this->db->where('deta_reserva.id_butaca', $id);
+    $query = $this->db->get(); 
+    $id = $query->row('id_reserva');    
+
+    if (isset($id))
+    {               
+      return $id;
+    }
+    else
+    {
+      return 0;
+    }
+  }
+  
+  function cambiarbutaca($id){
+
+    $this->db->select('tbl_butaca.id_butaca');
+    $this->db->from('tbl_butaca');     
+    $this->db->join('deta_reserva', 'deta_reserva.id_butaca = tbl_butaca.id_butaca');  
+    $this->db->join('tbl_reserva', 'tbl_reserva.id_reserva = deta_reserva.id_reserva');   
+    $this->db->where('tbl_reserva.dni_alumno', $id);
+    $query = $this->db->get(); 
+    
+    while( $row2 = mysql_fetch_assoc($query)){  
+
+      $sql="UPDATE tbl_butaca SET  estado ='RT'  WHERE id_butaca=$dn";
+      $query= $this->db->query($sql); 
+    }
+    return $query;
+  }
+
+  //cambio el estado de butaca para la funcion anular y retirar reserva una por una
+  function updatebutaca($idb, $datos){
+
+     $this->db->where('id_butaca', $idb);
+     $query = $this->db->update("tbl_butaca",$datos);
+     return $query;
+    
+   }
+//cambio el estado de la tabla reserva para la funcion anular y retirar reserva una por una
+  function AnularReservas($idres,$datos2){  
+
+    $this->db->where('id_reserva', $idres);
+    $query = $this->db->update("tbl_reserva",$datos2);
+     return $query;
+
+  }
+
+ function getdatoslibres(){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.estado', 'D');
+    $query = $this->db->get(); 
+
+    if($query->num_rows()>0){
+                return $query->result();
+            }
+            else{
+                return false;
+         }
+    
+  }    
+
+  function cambiarretirada($dn){
+        
+    $sql="UPDATE tbl_reserva SET  estado ='RT'  WHERE dni_alumno='$dn' ";
+    $query= $this->db->query($sql);
+   return  $query; 
+  }
+  
+  function traerbutacaid($dn){
+$i=0;
+   
+//     $sql="SELECT deta_reserva.id_butaca
+//                   FROM deta_reserva
+//                   JOIN tbl_reserva ON tbl_reserva.id_reserva=deta_reserva.id_reserva
+//                   WHERE tbl_reserva.dni_alumno=$dn
+//               ";
+//      $query= $this->db->query($sql);
+//      foreach ($query->result_array() as $row)
+// {
+//         $arre[$i]  = $row['id_butaca'];
+//        $i++;
+// }
+
+$this->db->select('deta_reserva.id_butaca');
+$this->db->from('deta_reserva');
+$this->db->join('tbl_reserva', 'tbl_reserva.id_reserva=deta_reserva.id_reserva');
+$this->db->where('tbl_reserva.dni_alumno', $dn);
+$query = $this->db->get();
+//$query->result_array();
+
+       //return $query;
+foreach ($query->result_array() as $row)
+{
+         $arre[$i]  = $row['id_butaca'];
+        $i++;
+ }
+      return $arre; 
+  } 
+
+  function updatebutu($data){
+        
+    $sql="UPDATE tbl_butaca SET  estado ='RT'  WHERE id_butaca='$data' ";
+    $query= $this->db->query($sql);
+   return  $query; 
+  }
+
+
+  function traerimpres($idbu,$num){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca');     
+    $this->db->where('tbl_butaca.id_butaca', $idbu);
+     $this->db->where('tbl_butaca.nro_butaca', $num);
+    $query = $this->db->get(); 
+
+  
+    if($query->num_rows()>0){
+        return $query->result_array();
+    }
+    else{
+        return false;
+        }
+   
+  }
+ function getdatosocupa(){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.estado', 'O');
+    $query = $this->db->get(); 
+
+    if($query->num_rows()>0){
+                return $query->result();
+            }
+            else{
+                return false;
+         }  
+  } 
+
+   function getdatosretira(){
+
+    $this->db->select('*');
+    $this->db->from('tbl_butaca');        
+    $this->db->where('tbl_butaca.estado', 'RT');
+    $query = $this->db->get(); 
+
+    if($query->num_rows()>0){
+                return $query->result();
+            }
+            else{
+                return false;
+         }  
+  } 
+
+}

@@ -1,0 +1,22 @@
+RewriteEngine On
+RewriteCond $1 !^(index\.php|assets)
+
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+AddDefaultCharset utf-8
+
+ 
+# Proteccion para evitar hacking y ataques xss
+# .fixed (no remover esta linea o se duplicara!)
+RewriteEngine On
+Options +FollowSymLinks
+RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+RewriteCond %{HTTP_USER_AGENT} ^(-|\.|') [OR]
+RewriteCond %{HTTP_USER_AGENT} ^(.*)(<|>|%3C|%3E)(.*) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^(.*)(libwww-perl|libwwwperl|snoopy|java|curl|wget|winhttp|python|nikto|scan|clshttp|archiver|loader|email|harvest|fetch|extract|grab|miner|suck|reaper|leach)(.*) [NC]
+RewriteRule ^.*$ - [F]
+ 
+RewriteCond %{HTTP_HOST} ^manesensanjuan\.com.ar\$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.manesensanjuan\.com.ar\$
+RewriteRule ^/?$ "http\:\/\/manesensanjuan\.com\.ar\/public\/" [R=301,L]
+

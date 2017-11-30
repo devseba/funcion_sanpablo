@@ -1,0 +1,1007 @@
+
+
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+
+        <div class="container" >         
+
+          <div class="row" style="background-color: #fff;">
+
+            <div class="well" id="cajaform">
+
+              <div class="phead">
+
+
+
+          
+
+                <h2><p class="pull-left">Listado de alumnos </p></h2>
+
+                <br>
+
+                <div class="text-left"></div>
+
+                <h5><p class="pull-left" align="text-left">NIVEL INICIAL </p><h5>
+
+                </h5>
+
+                  <?php
+
+                    echo '<button  class="button button-light pull-right" style="width: 100px; margin-top: 10px;" onclick="listado()">Ver ubicaciones</button>';
+
+                  ?>
+
+              </div>
+
+              <br><br><br>
+
+              <div class="pbody">
+
+      
+
+          <table id="tabla_inscriptos" class="display" cellspacing="0" border="0">
+
+            <thead>
+
+              <tr>                
+
+                <th width="20%" style="text-align: center">Acciones</th>
+
+                <th style="text-align: center">Apellido y Nombre</th>
+
+                <th style="text-align: center">DNI</th>
+
+                <th style="text-align: center">Sexo</th>
+
+                <th style="text-align: center">Telefono</th>
+
+                <th style="text-align: center">Domicilio</th>
+
+                <th style="text-align: center">Tutor</th>
+
+                <th style="text-align: center">Telefono del tutor</th>
+
+                <th style="text-align: center">Entrada</th>
+
+                
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <?php
+
+                  //var_dump($list);
+
+                  
+
+                  foreach($list as $a){ 
+
+
+
+                    //var_dump($bu);
+
+                    
+
+                
+
+                      $id=$a['id_reserva'];
+
+                      //$idf=$a['nro_butaca'];
+
+                  
+
+                      echo '<tr id="'.$id.'" >';
+
+                      echo '<td style="text-align: center">';
+
+                    // echo '<tr  >';
+
+                    // echo '<td style="text-align: center">';
+
+                      if ( $a['estado'] =='RE'){
+
+                      //if (strpos($permission,'Edit') !== false) {  class="glyphicon glyphicon-ice-lolly" aria-hidden="true"
+
+
+
+                       // echo '<i class="ion-printer" style="color: #f39c12; cursor: pointer; margin-left: 15px;"></i>';
+
+
+
+                       // if (($bu['estado'] == "RE" || $bu['estado'] == "RT") && ($a['documento'] ==  $bu['dni_alumno'] ) ){
+
+
+
+                          echo '<i  class="ion-ios-refresh" style="color: #007fa6; cursor: pointer;  font-size: 25px;  title="Cambiar de ubicacion" data-toggle="modal" data-target="#modalcambiar"></i>' ;
+
+                        //}
+
+                        //if ($a['estado'] == "RE" ){
+
+                          echo '<i  class="ion-close-circled" style="color: #007fa6; cursor: pointer;  font-size: 25px; text-align: center;" title="Anular reservas" ></i>' ;
+
+
+
+                          echo '<i  class="ion-checkmark-circled" style="color: #007fa6; cursor: pointer;  font-size: 25px; text-align: center;" title="Retirar reserva" ></i>' ;
+
+
+
+                          // echo '<i  class="ion-android-list" style="color: #007fa6; cursor: pointer;  font-size: 25px; text-align: center;" title="Ver datos de familia" data-toggle="modal" data-target="#modaldatos"></i>' ;
+
+                      }
+
+                      else {
+
+                        echo '';
+
+                      }
+
+
+
+                   //data-toggle="modal" data-target="#imprimi"
+
+                        echo '</td>';
+
+                       
+
+                        echo '<td class="maquin"style="text-align: center">'.$a['apellido'].', '.$a['nombre'].'</td>';
+
+                        echo '<td style="text-align: center">'.$a['documento'].'</td>';
+
+                        echo '<td style="text-align: center">'.$a['sexo'].'</td>';             
+
+                        echo '<td style="text-align: center">'.$a['telefono'].'</td>';
+
+                        echo '<td style="text-align: center">'.$a['domicilio'].'</td>'; 
+
+                        echo '<td style="text-align: center">'.$a['ape'].', '.$a['nom'].'</td>';  
+
+                        echo '<td style="text-align: center">'.$a['telefono_particular'].'</td>';
+
+                         if ( $a['estado'] =='RE' || $a['estado'] =='RT') {
+
+                          echo '<td style="text-align: center">'.($a['estado'] == 'D' ? '<small class="label pull-left bg-green" style="background-color: #38CD55  ;">Disponible</small>' :($a['estado'] == 'RE' ? '<small class="label pull-left bg-blue" style="background-color: #007fa6  ;">Reserva</small>' : ($a['estado'] == 'RT' ? '<small class="label pull-left bg-yellows" style="background-color: #FFC300  ;">Retirado</small>': '<small class="label pull-left bg-red"  style="background-color: #ff0000  ;">Ocupado</small>'))).'</td>';
+
+                       }
+
+                       else{ 
+
+                        echo '<td style="text-align: center"></td>';
+
+                      }
+
+                        echo '</tr>';
+
+
+
+                    //}
+
+                  }
+
+
+
+              ?>
+
+            </tbody>
+
+            
+
+          </table>
+
+          </div>
+
+     
+
+          </div>
+
+        </div><!-- /.box-body -->
+
+    
+
+
+
+
+
+<script>
+
+var gltr="";
+
+var glnu="";
+
+//$(document).ready(function(event) {
+
+    //Ver datos de la familia del alumno
+
+    $(".ion-android-list").click(function (e) { 
+
+       
+
+      var idbutaca = $(this).parent('td').parent('tr').attr('id');
+
+     var num = $(this).parent('td').parent('tr').attr('class');
+
+      console.log("Id de butaca");
+
+      console.log(idbutaca);
+
+      console.log("Nro de butaca");
+
+      console.log(num);
+
+      datos= parseInt(num);
+
+      console.log(datos);
+
+        $.ajax({
+
+          type: 'POST',
+
+          data: { idbutaca: idbutaca},
+
+          url: '<?php echo base_url(); ?>admin/Butaca/datosfamilia', //index.php/
+
+          success: function(data){
+
+                                    
+
+                  console.log(data);
+
+                  //console.log(data['descripcion']);
+
+                 // console.log(data['dni_alumno']);
+
+                  //console.log(data['datos'][0]['dni_alumno']);
+
+                  $("#noal").val(data['datos'][0]['nom']);
+
+                  $("#apal").val(data['datos'][0]['apell']);
+
+                  $("#dnialu").val(data['datos'][0]['doc']);
+
+                  $("#sexo").val(data['datos'][0]['sexo']);
+
+                  $("#dom").val(data['datos'][0]['domicilio']);
+
+                  $("#not").val(data['datos'][0]['nombre']);
+
+                  $("#apt").val(data['datos'][0]['apellido']);
+
+                  $("#dnit").val(data['datos'][0]['documento']);
+
+                  $("#telt").val(data['datos'][0]['telefono_particular']);
+
+                  $("#emt").val(data['datos'][0]['email']);
+
+                  $("#fe").val(data['datos'][0]['fecha_nac']);
+
+                },
+
+            
+
+          error: function(result){
+
+                
+
+                console.log(result);
+
+              },
+
+              dataType: 'json'
+
+          });
+
+    
+
+    });
+
+    //Anular reserva
+
+    $(".ion-close-circled").click(function (e) { 
+
+       
+
+      var idre = $(this).parent('td').parent('tr').attr('id');
+
+      
+
+      console.log("Id de Reserva");
+
+      console.log(idre);
+
+    
+
+
+
+        $.ajax({
+
+          type: 'POST',
+
+          data: { idre: idre},
+
+          url: '<?php echo base_url(); ?>admin/Butaca/BajaReserva', //index.php/
+
+          success: function(data){
+
+                  console.log("Estoy anulando reserva");
+
+                                    
+
+                  console.log(data);
+
+                  $('.container').empty();
+
+                  $(".container").load("<?php echo base_url(); ?>admin/Butaca/cargardni");
+
+                  //console.log(data['descripcion']);
+
+                 // console.log(data['dni_alumno']);
+
+                 // console.log(data['datos'][0]['dni_alumno']);
+
+                
+
+
+
+                },
+
+            
+
+          error: function(result){
+
+                
+
+                console.log(result);
+
+              }
+
+              //            dataType: 'json'
+
+        });
+
+    
+
+    });
+
+    //Retirar reserva 
+
+    $(".ion-checkmark-circled").click(function (e) {
+
+
+
+      console.log("Estoy Retirando una reserva");
+
+      var idre = $(this).parent('td').parent('tr').attr('id');    
+
+      console.log("Id de Reserva");
+
+      console.log(idre);
+
+      gltr=idre;
+
+  
+
+                                                  
+
+      $.ajax({
+
+        type: 'POST',
+
+        data: {idre:idre},
+
+        url: '<?php  echo base_url(); ?>admin/Butaca/EntregarReserva', //index.php/
+
+        success: function(data){
+
+    
+
+                console.log("Exito al retirar una reserva");
+
+                console.log(data);
+
+                //$(tr).remove();
+
+                 $('.container').empty();
+
+                 $(".container").load("<?php echo base_url(); ?>admin/Butaca/cargardni");  
+
+                //comprobante();
+
+                
+
+
+
+            },
+
+          
+
+        error: function(result){
+
+              console.log("Entre por el error");
+
+              console.log(result);
+
+            }
+
+           // dataType: 'json'
+
+      });
+
+    });
+
+   
+
+    $(". ion-ios-refresh").click(function (e) {
+
+      var idbutaca = $(this).parent('td').parent('tr').attr('id');
+
+      var num = $(this).parent('td').parent('tr').attr('class');
+
+      console.log("Id de butaca");
+
+      console.log(idbutaca);
+
+      console.log("Nro de butaca");
+
+      console.log(num);
+
+      datos= parseInt(num);
+
+      console.log(datos);
+
+        $.ajax({
+
+          type: 'POST',
+
+          data: { idbutaca: idbutaca, num:num},
+
+          url: '<?php echo base_url(); ?>admin/Butaca/traerdatosbuaca', //index.php/
+
+          success: function(data){
+
+                  console.log(data);
+
+                  
+
+                
+
+
+
+                },
+
+            
+
+          error: function(result){
+
+                
+
+                console.log(result);
+
+              }
+
+              //            dataType: 'json'
+
+        });
+
+    
+
+
+
+    }); 
+
+  
+
+//});
+
+function listado(){
+
+ location.href = "<?php echo base_url(); ?>admin/Butaca";
+
+  //$('.container').empty();
+
+  //$(".container").load("<?php echo base_url(); ?>admin/Butaca/volver"); 
+}
+
+//  function comprobante(){
+
+//       $('#imprimi').modal('show');
+
+// }
+
+// function imprimir(){
+
+
+
+//   console.log("Estoy imprimiendo un retiro de reserva");
+
+//   var tr = $(this).parent('td').parent('tr').attr('id');
+
+//   var num = $(this).parent('td').parent('tr').attr('class');
+
+//   console.log("Id de butaca");
+
+//   console.log(gltr);
+
+//   console.log("Nro de butaca");
+
+//   console.log(glnu);
+
+//   $.ajax({
+
+//       type: 'POST',
+
+//       data: { gltr:gltr, glnu:glnu },
+
+//       url: '<?php echo base_url(); ?> /Asiento/traerimpre', 
+
+//       success: function(data){
+
+           
+
+//             console.log("Entre a la impresion");
+
+//             console.log(data);
+
+//             var  texto =
+
+//                         '<div class="" id="vistaimprimir">'+
+
+//                            '<div class="container">'+
+
+//                              '<div class="thumbnail">'+
+
+//                               '<div class="caption">'+
+
+//                                    '<div class="row" >'+
+
+//                                      '<div class="panel panel-default">'+
+
+//                                        '<div class="form-group">'+
+
+//                                          '<h3 class="text-center" align="center"></h3>'+
+
+//                                        '</div>'+
+
+//                                        '<hr/>'+
+
+//                                        '<div class="panel-body">'+
+
+//                                          '<div class="container">'+
+
+//                                            '<div class="thumbnail">'+
+
+//                                                '<div class="row">'+
+
+//                                                  '<div class="col-sm-12 col-md-12">'+
+
+//                                                    '<table width="100%" style="text-align:justify" border="1px solid black">'+
+
+//                                                      '<tr>'+
+
+//                                                        '<tr>'+
+
+//                                                          '<td  colspan="1"  align="left" >'+
+
+//                                                            '<div class="text-left">  alt="Colegio San Pablo" title="Colegio San Pablo" width="280" height="80"/></div></td>'+
+
+//                                                            '</td>'+ 
+
+//                                                            '<td >'+
+
+//                                                              '<div  class="col-md-4 "><h3> COMPROBANTE</h3>'+
+
+//                                                              '</div>'+
+
+                                                            
+
+//                                                           '</td>'+
+
+
+
+//                                                          '</tr>'+
+
+//                                                          '</tr>'+
+
+//                                                        '</table>'+
+
+//                                                      '</div>'+
+
+//                                                    '</div>'+
+
+//                                                    '<div class="row">'+
+
+//                                                      '<div class="col-sm-12 col-md-12">'+
+
+//                                                        '<h3>Función de fin de año de nivel inicial FANTASÍA, organizada por el colegio SAN PABLO</h3>'+
+
+//                                                        '<br>'+
+
+//                                                        '<table width="100%" style="text-align:justify" >'+                                             
+
+//                                                        '<tr>'+
+
+//                                                              '<td>Fila</td>'+
+
+//                                                              '<td></td>'+
+
+//                                                              '<td style="text-align: left"" >Asiento</td>'+
+
+//                                                             '<td></td>'+
+
+//                                                              '</tr>'+
+
+
+
+                                                            
+
+                                                      
+
+//                                                        '</table>'+
+
+//                                                      '</div>'+
+
+//                                                    '</div>'+
+
+//                                                    '<br>'+
+
+//                                                    '<br>'+
+
+//                                                    '<div class="row">'+
+
+//                                                      '<div class="col-sm-12 col-md-12">'+
+
+//                                                        '<h3> Tiene un plazo de dos dia apartir de la fecha para retirar la Entrada </h3>'+
+
+//                                                     '</div>'+
+
+//                                                    '</div>'+
+
+//                                                    '<div class="col-sm-6 col-md-6" border="1" >'+
+
+//                                                      '<div class="col-sm-12 col-md-12">'+
+
+                                                      
+
+//                                                        '<p class="bluetxt">La función se realizará el día martes 28 de noviembre en el teatro Sarmiento (Av. Alem 34 Norte - Capital) desde las 20:00 hs.</p>'+
+
+//                                                     '</div>'+
+
+//                                                    '</div>'+
+
+                                              
+
+//                                                    '<br>'+
+
+//                                                    '<br>'+
+
+
+
+                                                
+
+//                                                   //'<div class="container-fluid">'+
+
+                                           
+
+//                                                  '</div>'+
+
+//                                                '</div>'+
+
+//                                              '</div>'+
+
+
+
+                                           
+
+//                                           '</div>'+
+
+//                                          '</div>'+
+
+//                                        '</div>'+
+
+//                                       '<style>'+
+
+//                                           '.table, .table>tr, .table>td  {} '+
+
+//                                       '</style>';
+
+//                                        //border:  1px solid black;
+
+
+
+
+
+//                                        var mywindow = window.open('', 'Imprimir', 'height=700,width=900');
+
+//                                         mywindow.document.write('<html><head><title></title>');
+
+//                                          //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+
+//                                          //mywindow.document.write('<link rel="stylesheet" href="main.css">
+
+//                                          mywindow.document.write('</head><body onload="window.print();">');
+
+//                                          mywindow.document.write(texto);
+
+//                                          mywindow.document.write('</body></html>');
+
+
+
+//                                          mywindow.document.close(); // necessary for IE >= 10
+
+//                                          mywindow.focus(); // necessary for IE >= 10
+
+//                                          //mywindow.print();
+
+//                                          //mywindow.close();
+
+//                                          return true; 
+
+//                                       },
+
+
+
+//               error: function(result){
+
+
+
+//                         console.log(result);
+
+//                         console.log("error en la vistaimprimir");
+
+//                                       },
+
+//                     dataType: 'json'
+
+//     });
+
+     
+
+
+
+// }
+
+</script>
+
+
+
+  <div class="modal fade" id="modaldatos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog modal-lg" role="document" style="width:80%" >
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Datos de Reserva </h4> 
+
+        </div>
+
+        <div class="modal-body" id="modalBodydestAgre">
+
+            <div class="col-sm-12 col-md-12">
+
+             <center><label>ALUMNO</label></center>
+
+              <br>
+
+       
+
+                <div class="col-xs-3">Nombre:
+
+                   <input type="text" id="noal" name="noal" class="form-control">  
+
+                </div>
+
+                <div class="col-xs-3">Apellido:
+
+                  <input type="text" id="apal" name="apal" class="form-control">     
+
+                </div>
+
+            
+
+                <div class="col-xs-3">Dni de alumno:
+
+                  <input type="text" id="dnialu" name="dnialu" class="form-control" >     
+
+                </div> 
+
+          
+
+                <div class="col-xs-3">Sexo:
+
+                  <input type="text" id="sexo" name="sexo" class="form-control" >     
+
+                </div> 
+
+           
+
+                <div class="col-xs-3">Domicilio:
+
+                  <input type="text" id="dom" name="dom" class="form-control" >     
+
+                </div> 
+
+                <br>
+
+                <center><label>TUTOR</label></center>
+
+                <br>
+
+                <div class="col-xs-3">Nombre:
+
+                  <input type="text" id="not" name="not" class="form-control" >     
+
+                </div>
+
+                <div class="col-xs-3">Apellido:
+
+                  <input type="text" id="apt" name="apt" class="form-control" >     
+
+                </div>
+
+                <div class="col-xs-3">Dni:
+
+                  <input type="text" id="dnit" name="dnit" class="form-control" >     
+
+                </div>
+
+                <div class="col-xs-3">Telefono Particular:
+
+                  <input type="text" id="telt" name="telt" class="form-control" >     
+
+                </div>
+
+                <div class="col-xs-3">Email:
+
+                  <input type="text" id="emt" name="emt" class="form-control" >     
+
+                </div>
+
+                <div class="col-xs-3">Fecha de nacimiento:
+
+                  <input type="text" id="fe" name="fe" class="form-control" >     
+
+                </div>
+
+                <br>
+
+                <center><label>UBICACIÓN</label></center>
+
+                <br>
+
+                <table id="tabla_inscriptos"  class="table table-bordered table-hover">
+
+                  <thead>                        
+
+                    <tr>                          
+
+                      <th style="text-align: center">Fila </th>
+
+                      <th style="text-align: center">Nro de butaca </th>  
+
+                    </tr>  
+
+                  </thead>
+
+                  <tbody>   
+
+                  </tbody>
+
+                </table>
+
+                
+
+            </div>
+
+         
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>  
+
+<!--  Modal pregunta -->
+
+  <div class="modal fade" id="imprimi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> COMPROBANTE </h4> 
+
+        </div>
+
+        <div class="modal-body" id="modalBodydestAgre">
+
+            <p><label>¿Desea imprimir comprobante?</label></p>
+
+        </div>
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelar" onclick="">No</button>
+
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="imprimir()" 
+
+          id="btnSavedest">SI</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="modal fade" id="modalcambiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document"  style="width: 80%">
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Cambiar Reserva </h4> 
+
+        </div>
+
+        <div class="modal-body" id="modalBodydestAgre">
+
+          <div class="col-sm-12 col-md-12">
+
+           <label>UBICACIÓN:</label>
+
+            <br>
+
+            <div class="col-xs-4"><label>Fila</label>
+
+               <input type="text" id="fi" name="fi" class="form-control">
+
+            </div>
+
+            <div class="col-xs-4"><label>Nro de butaca</label>
+
+              <input type="text" id="nu" name="nu" class="form-control" >   
+
+              <input type="text" id="nu1" name="nu1" class="form-control" >    
+
+            </div>
+
+            <p>Para cambiar de abucación, tiene que anular la resva y volver a selecionar las butacas deseadas.</p> 
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="imprimir()" 
+
+          id="btnSavedest">ANULAR </button>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+

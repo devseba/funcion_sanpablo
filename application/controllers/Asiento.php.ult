@@ -1,0 +1,108 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Asiento extends CI_Controller {
+	function __construct(){
+		parent::__construct();
+		$this->load->model('Asientos');
+	}
+	// METODO SERVER
+	// public function index(){ //$permission
+	// 	$this->load->view('include/header_admin');
+	// 	 //$this->load->view('include/navbar_admin');
+	// 	 $this->load->view('include/footer_admin');
+
+	// 	$data['list'] = $this->Asientos->asientos_List();
+	// 	//$data['permission'] = $permission;
+
+	// 	       $this->load->view('asientos/view_',$data);
+	// }
+
+
+
+
+	// METODO LOCAL
+	public function index(){
+		
+	 	$data['list'] = $this->Asientos->asientos_List();
+	 	//$data['permission'] = $permission;
+		
+         $this->load->view('asientos/view_',$data);
+	 }
+	public function getReserva(){
+	 	
+	 	$response = $this->Asientos->getReservas($this->input->post());
+	 	
+	 	if($response){
+	 		$arre[]=$response;
+	 	}
+	 	//echo "butacas";
+	 	//var_dump($response);
+	 	echo json_encode($arre);	
+	} 	
+
+	public function setAsiento(){
+		
+		// cabecera de reserva
+		$data = $this->input->post();
+		$dni = array_shift($data);
+		$id_insert= $this->Asientos->setAsientos($dni);
+
+
+		$tam = count($data);
+		$tam = $tam - 1;
+
+		$x=0;
+		for ($i=0; $i < $tam; $i+=2) { 
+			
+			// $fila =  $x."fila";
+			// $asiento = $x."asiento";
+			$fila =  $x."fila";
+			$asiento = $x."asiento";
+
+			$a['fila']= $data[$fila];
+			$a['asiento']= $data[$asiento];
+
+			// traigo id relacion de asiento y fila
+			$id_relacion = $this->Asientos->getIdAsientos($a);
+
+			// guarda el detalle de la reserva y actualiza estado
+			$response = $this->Asientos->setDetaAsientos($id_insert,$id_relacion);
+			
+			// indice para nombre de fila y asiento
+			$x+=1;			
+		}
+
+		//var_dump($tam);
+
+
+		echo "true";
+	}
+
+	public function getimprimir(){
+
+		$dn=$_POST['dni'];
+		//$asiento1=$_POST['asiento'];
+		
+
+		$result = $this->Asientos->getimprimir($dn); //id de butaca 1
+		 $arre=array();
+		if($result)
+		{	
+
+			$arre['datos']=$result;
+			//$butaca = $this->Asientos->getimprimirbu($fila2, $asiento2); //id de butaca 2
+			// if($butaca)
+			// {
+			// 	$arre['butaca']=$butaca;
+			// }
+			// else $arre['butaca']=0;
+
+			echo json_encode($arre);
+		}
+		else{
+			$arre['datos']=0;
+			echo json_encode($arre);			
+		} 
+	}
+}

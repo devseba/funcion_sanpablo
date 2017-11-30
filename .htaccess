@@ -1,0 +1,4 @@
+RewriteEngine on
+Rewritebase /funcion/
+RewriteCond $1 !^(index\.php|assets|flipclock-master)
+RewriteRule ^(.*)$ index.php/$1 [L]

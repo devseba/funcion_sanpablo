@@ -1,0 +1,165 @@
+<section class="content">
+ <div class="row">
+  <div class="col-xs-12">
+    <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+          <h4><i class="icon fa fa-ban"></i> Error!</h4>
+          Revise que todos los campos esten completos
+      </div>
+  </div>
+</div>
+	<div id="formulario">
+		<div class="container">
+			<div id="preins">
+					
+				<!--	<div id="clockdiv" data-wow-delay="2s" class="wow fadeInDown">
+					<div>Faltan:&nbsp;</div>
+					<div>
+					    <span class="days"></span>
+					   <div class="smalltext">&nbsp;D&iacute;as |&nbsp;&nbsp;</div>
+					</div>
+					<div>
+					    <span class="hours"></span>
+					    <div class="smalltext">&nbsp;Hs |&nbsp;&nbsp;</div>
+					</div>
+					<div>
+					   <span class="minutes"></span>
+					   <div class="smalltext">&nbsp;Min</div>
+					</div>
+				</div>-->
+					
+			    <div class="row">
+					<!--<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">-->
+                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">	
+					
+						<h5 id="titpreins">Adquirir Entrada</h5>
+						<a id="btn-inicio" href="<?php echo base_url('inicio'); ?>">
+					        <img src="<?=base_url('assets/img/izquierda.png')?>" alt="" width=""/>
+								Inicio
+						</a>
+					<div class="cf" id="cajaform">
+						<p>Por favor, Ingrese los datos necesarios para poder reservar su entrada.</p>
+						<p>Una vez teniendo su reserva realizada, deber&aacute; retirar su entrada por los <a href="<?php echo base_url('inicio/retirar_entrada/'); ?>">puntos de entrega.</a> </p>
+						<br>
+                        <br>
+						<div class="form-group">
+							<label for="dni" class="col-sm-4 control-label noright">DNI del alumno:</label>
+							<div class="col-sm-8">
+						    	<input type="text" class="form-control" id="dnialumno" name="dnialumno" required="required" placeholder="Ingrese DNI del alumno">
+							</div>
+						</div>
+						<br>
+						<br>
+						<div class="form-group">
+							<label for="dni" class="col-sm-4 control-label noright">DNI del tutor:</label>
+							<div class="col-sm-8">
+						    	<input type="text" class="form-control" id="dnitutor" name="dnitutor" required="required" placeholder="Ingrese DNI del tutor">
+							</div>
+						</div>
+						<br>
+						<br>
+						<div class="form-group">												
+							<div class="" style="display: inline-block;float:right;">
+							   <button type="button" class="btn btn-azul pull-right" id="asistir" onclick="guardar()">Aceptar</button>
+							</div>
+						</div>
+
+						<?php echo form_close()?>	
+					   <!-- </form> -->
+				
+					</div>
+				</div>	
+			    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+					<!--<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> --> <!--cambio -->
+					<div id="formtxt">
+						<section>
+						   	<h1 data-wow-delay="0.5s" class="wow fadeInUp">Nivel Inicial</h1>
+							<h2 data-wow-delay="0.75s" class="wow fadeInUp">Funci&oacute;n Fin de A&ntilde;o</h2>
+							<h3 data-wow-delay="1s" class="wow fadeInUp">"Fantas&iacute;a"</h3>
+							
+							<div data-wow-delay="1.25s" class="clock wow fadeInUp"></div>
+								<div data-wow-delay="1.5s" class="wow fadeInUp" id="fecha">
+								
+									<strong>28/11 &middot; 20 hs.</strong>
+									<span>TEATRO SARMIENTO</span>
+								</div>
+						</section>
+					</div>	
+				</div>
+			</div>
+					
+			</div>
+			<div class="row">
+				<div class="col-lg-10 col-lg-offset-2 col-md-12 col-md-offset-0 col-sm-12 col-xs-12">
+					<div id="auspician">
+						Auspician:
+						<a class="wow fadeInUp"><img src="<?=base_url('assets/img/logo-gobierno-de-san-juan.png')?>" alt="Gobierno de San Juan" title="Gobierno de San Juan" height="60"/></a>
+						<img class="wow fadeIn hidden-xs" src="<?=base_url('assets/img/divisor.jpg')?>" alt="" height="60"/>
+						<a data-wow-delay="0.5s" class="wow fadeInUp"><img src="<?=base_url('assets/img/secretaria-de-deportes.jpg')?>" alt="Secretar&iacute;a de Deportes" title="Gobierno de San Juan" height="60"/></a>
+						<a data-wow-delay="0.75s" class="wow fadeInUp"><img src="<?=base_url('assets/img/ministerio-de-salud-publica.jpg')?>" alt="Ministerio de Salud P&uacute;blica" title="Ministerio de Salud P&uacute;blica" height="60"/></a>
+						<a data-wow-delay="1s" class="wow fadeInUp"><img src="<?=base_url('assets/img/ministerio-de-educacion.jpg')?>" alt="Ministerio de Educaci&oacute;n" title="Ministerio de Educaci&oacute;n" height="60"/></a>
+						<section class="text-center">
+							<a data-wow-delay="1.25s" class="wow fadeInUp"><img src="<?=base_url('assets/img/logo-osde.jpg')?>" alt="OSDE" title="OSDE" height="78"/></a>
+							<a data-wow-delay="1.5s" class="wow fadeInUp"><img src="<?=base_url('assets/img/logo-banco-san-juan.jpg')?>" alt="Banco San Juan" title="Banco San Juan" height="78"/></a>
+						</section>
+					</div>
+				</div>
+			</div>
+	    </div>
+	</div>
+		
+ <!--</div> -->
+ <script type="text/javascript">
+
+	function guardar(){    // alert("si guardo ");
+        //var id_equipo= $('#equipo').val();
+        var dnit = $('#dnitutor').val();
+        var dnia = $('#dnialumno').val();
+        var hayError = false; 
+  
+        if(dnit !='' && dnia !='' ){
+          
+          console.log("estoy  guardando");
+          console.log("Dni del tutor");
+          console.log(dnit);
+          console.log("Dni alumno");
+          console.log(dnia);
+          	$.ajax({
+              type: 'POST',
+              data: {dnia:dnia, dnit:dnit},
+              url: 'guardar_inscripcion',  //index.php/
+              success: function(data){
+              	console.log(data);
+              	//alert("ENTRE");
+              
+              	//WaitingClose();
+              	$('#formulario').empty();
+ 				//$('#formulario').remove();
+				
+    			//$("#formulario").load("<?php //echo base_url(); ?>Asiento/cargardni/"+dnia+"");
+    			$("#formulario").load("<?php echo base_url(); ?>Asiento/index/");
+
+//54370237
+//33848693
+
+                    //regresa();
+                    },
+              error: function(result){
+                    console.log ("entre por error");
+                    console.log(result);
+                  }
+                  //dataType: 'json'
+            });
+
+        }
+        else {
+        	hayError=true;
+        	$('#error').fadeIn('slow');
+         	return;
+         	}
+        	if(hayError == false){
+            	$('#error').fadeOut('slow');
+        	}        
+ 	}
+	
+
+</script>

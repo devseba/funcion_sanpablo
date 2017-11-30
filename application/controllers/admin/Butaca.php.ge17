@@ -1,0 +1,315 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Butaca extends CI_Controller {
+	function __construct(){
+		parent::__construct();
+		$this->load->model('admin/Butacas');
+		
+	}
+
+	public function index(){ //$permission
+		$this->load->view('include/header_admin');
+	  //$this->load->view('include/navbar_admin');
+	 
+		$data['list'] = $this->Butacas->asientos_List();	
+        $this->load->view('admin/butacas/view_',$data);
+        $this->load->view('include/footer_admin');
+	}
+	public function volver(){ //$permission
+		
+	
+		
+		$data['list'] = $this->Butacas->asientos_List();
+		//$data['permission'] = $permission;
+		
+        $this->load->view('admin/butacas/view_',$data);
+        $this->load->view('include/header_admin');
+        $this->load->view('include/navbar_admin');
+	  	$this->load->view('include/footer_admin');
+	}
+
+	public function cargardni(){ 
+		$this->load->view('include/header_admin');
+	  //	$this->load->view('include/navbar_admin');
+	  	$this->load->view('include/footer_admin');
+
+		$data['list'] = $this->Butacas->asientos_List1();
+		// if($data>0){
+		// 	$arre['list']=$data;
+		// 	$res = $this->Butacas->asientos_List2();
+		// 	if($res>0)
+		// 	{
+		// 		$arre['bu']=$res;
+		// 	}
+		// 	else $arre['bu']=0;
+
+
+		//$data['bu'] = $this->Butacas->asientos_List2();
+       	
+         $this->load->view('admin/butacas/list',$data); 
+     
+    }
+	
+	public function datosfamilia(){ 
+ 		$idb=$_POST['idbutaca'];
+		
+	 	$result = $this->Butacas->datosfamilia($idb);
+
+      if($result){ 
+        
+        $arre['datos']=$result;
+       	echo json_encode($arre);
+	 	
+	 	}
+	 	else {
+	 		$arre['datos']=0;
+	 		echo json_encode($arre);
+	 	}
+	 
+	 }
+	// trae id relacion asiento/fia y guarda reserva segun cantidad 
+	public function setAsiento(){		
+		
+		$da = $this->input->post();
+		$cantidad =count($da);
+
+		// si trae solo 1 asiento
+		if (count($da) == 4) {
+			
+			// con id de asiento y fila traigo id de relacion
+			$data['fila'] = $this->input->post('1fila');
+			$data['asiento'] = $this->input->post('1asiento');	
+			
+			// guardo id, dni de alum y de tutor en array
+			$id['1'] = $this->Butacas->getIdAsientos($data);
+			$id['dni_alumno'] = $this->input->post('dni_alumno');
+			$id['dni_tutor'] = $this->input->post('dni_tutor');
+			
+			// guardo reserva envio array y traigo id de reserva
+			$id_insert= $this->Butacas->setAsientos($id);
+			
+			// con id de reserva guardo deta reserva
+			$response = $this->Butacas->setDetaAsientos($id_insert,$id);
+			echo json_encode($response);
+		}else{
+			
+			// con id de asiento y fila traigo id de relacion de los dos asientos
+			$data['fila'] = $this->input->post('1fila');
+			$data['asiento'] = $this->input->post('1asiento');	
+			$id['1'] = $this->Butacas->getIdAsientos($data);
+			//guardo los dos ids
+			$data['fila'] = $this->input->post('2fila');
+			$data['asiento'] = $this->input->post('2asiento');	
+			$id['2'] = $this->Butacas->getIdAsientos($data);
+
+			// guardo id, dni de alum y de tutor en array
+			$id['dni_alumno'] = $this->input->post('dni_alumno');
+			$id['dni_tutor'] = $this->input->post('dni_tutor');
+			
+			// guardo los dos reservas
+			$id_insert= $this->Butacas->setAsientos($id);
+			// con ids gurado los detareserva
+			$response = $this->Butacas->setDetaAsientos($id_insert,$id);
+			echo json_encode($response);
+		}
+	}
+	public function asientos_reserva(){
+
+	    $dat= $this->Butacas->getdatosreserva(); //traigo todos los datos 
+	    echo json_encode($dat);
+  	
+	} 
+	public function getimprimir(){
+
+		$fila1=$_POST['fila1'];
+		$asiento1=$_POST['asiento1'];
+		$fila2=$_POST['fila2'];
+		$asiento2=$_POST['asiento2'];
+
+		$result = $this->Butacas->getimprimir($fila1, $asiento1); //id de butaca 1
+		if($result)
+		{	
+			$arre['datos']=$result;
+			//$butaca = $this->Asientos->getimprimirbu($fila2, $asiento2); //id de butaca 2
+			// if($butaca)
+			// {
+			// 	$arre['butaca']=$butaca;
+			// }
+			// else $arre['butaca']=0;
+
+			echo json_encode($arre);
+		}
+		else $arre['datos']=0;
+	}
+	
+	public function traerbutaca(){
+		
+		$dn=$_POST['idgl'];
+		$cantidad = $this->Butacas->traerbutacas($dn);
+		if($cantidad)
+		{	
+			// $arre=array();
+	        foreach ($cantidad as $row ) 
+	        {   
+	           $arre[]=$row;
+	        }
+			echo json_encode($arre);
+		}
+		else echo "nada";
+	}
+	//Trae dni - funcion traer_dni - listo
+	public function getdni(){
+			
+		$sector = $this->Butacas->getdnis();
+
+		if($sector){	
+			$arre=array();
+	        foreach ($sector as $row ) 
+	        {   
+	           $arre[]=$row;
+	        }
+			echo json_encode($arre);
+		}
+		else echo "nada";
+	}
+
+	// public function AnularReserva(){
+
+	// 	$idbu=$_POST['idbutaca'];//id de butaca
+	// 	$nu=$_POST['num'];//nr de butaca
+	// 	$this->db->trans_start();
+	// 	$datos = array(
+			       	 
+	// 		       	 'estado'=>'D'
+			        	 
+	// 	       		);
+	// 	$datos2 = array(
+			       	 
+	// 		       	 'estado'=>'ANU'
+			        	 
+	// 	       		);
+		
+		
+	// 	$idres= $this->Butacas->traerreserva($idbu);//traido id de reserva 
+	// 	$dat= $this->Butacas->updatebutaca($idbu,$datos);//cambio estado en la tabla butaca a D
+	// 	$dat2= $this->Butacas->AnularReservas($idres,$datos2); //cambiar el estado de reserva a anulados
+	// 	$this->db->trans_complete();
+	//       if ($this->db->trans_status() === FALSE){
+	//           return false;  
+	//       }
+	//       else{
+	//           return true;
+	//       }  
+
+	// }
+
+	// public function EntregarReserva(){
+	// 	$idbu=$_POST['tr']; //id de butaca
+	// 	//$num=$_POST['idgl']; //numero de butaca
+	// 	$datos = array(
+			       	 
+	// 		       	 'estado'=>'RT'
+			        	 
+	// 	       		);
+	// 	$idbut= $this->Asientos->updatebutaca($idbu,$datos); //cambiar el estado de la tabla butaca a RETIRADO
+	// 	$idres= $this->Asientos->traerreserva($idbu);//traido id de reserva
+	// 	$dat2= $this->Asientos->AnularReservas($idres,$datos); //cambiar el estado de reserva a RETIRADO RT
+	// 	return true;
+	// }
+	//Funcion entregar - view - listo
+	public function RetirarEntrada(){
+		
+		$num=$_POST['idgl']; //dni del alumno
+		$this->db->trans_start();
+
+		$idbut= $this->Butacas->cambiarretirada($num);//cambiar el estado de la tabla reserva a RETIRADOsegun el dni del alumno
+		$datos = array(
+			       	 
+			       	 'estado'=>'RT'
+			        	 
+		       		);
+		$result= $this->Butacas->traerbutacaid($num); //Trae el id de butacas resrvadas segun el dni del alumno
+		
+	    foreach ($result as $row ){   
+				$result1= $this->Butacas->updatebutu($row,$datos); //cambia el estado a retiradas en la tabla butaca
+	    }
+
+		$this->db->trans_complete();
+      	if ($this->db->trans_status() === FALSE){
+	          return false;  
+	    }
+	    else{
+	          return true;
+	       	}  
+		
+	}
+	//Funcion anular - view - listo
+	public function AnularReserva(){
+		
+		$num=$_POST['idgl']; //dni del alumno
+		$this->db->trans_start();
+
+	 	$datos = array(
+			       	 
+	 		       	 'estado'=>'AN'
+			        	 
+ 	       		);
+	 	$datos2 = array(
+			       	 
+	 		       	 'estado'=>'D'
+			        	 
+	 	       		);
+	 	$res= $this->Butacas->AnularReservas($num);//cambiar el estado de la tabla reserva a anulado segun el dni del alumno
+		$idb= $this->Butacas->TraerIdButaca($num); //Trae el id de butacas resrvadas segun el dni del alumno
+		
+	    foreach ($idb as $row ){   
+			$result1= $this->Butacas->ModificarButaca($row,$datos2); //cambia el estado a diposibles en la tabla butaca
+	    }
+
+		$this->db->trans_complete();
+    	if ($this->db->trans_status() === FALSE){
+	           return false;  
+     	}
+	    else{
+	           return true;
+	    }  
+		
+	 }
+
+	public function asientos_libres(){
+
+	    $dat= $this->Butacas->getdatoslibres(); //traigo todos los datos 
+	    echo json_encode($dat);
+  	
+	}
+
+  //   public function traerimpre(){
+  //   	$idbu=$_POST['gltr']; //id de butaca
+		// $num=$_POST['glnu']; //numero de butaca
+
+  //      $response = $this->Butacas->traerimpres($idbu,$num);
+  //      echo json_encode($response);
+  //   }
+
+   
+	public function asientos_ocupados(){
+
+	    $dat= $this->Butacas->getdatosocupa(); //traigo todos los datos 
+	    echo json_encode($dat);
+  	
+	} 
+	public function asientos_retiradas(){
+
+	    $dat= $this->Butacas->getdatosretira(); //traigo todos los datos 
+	    echo json_encode($dat);
+  	
+	} 
+	 public function traerdatosbuaca(){
+	 	$idbu=$_POST['idbutaca']; //id de butaca
+		$num=$_POST['num']; //numero de butaca
+		$dat= $this->Butacas->traerdatosbuaca($idbu,$num);
+		return $dat;
+	}
+	
+}

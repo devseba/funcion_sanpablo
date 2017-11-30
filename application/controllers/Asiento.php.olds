@@ -1,0 +1,74 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Asiento extends CI_Controller {
+	function __construct(){
+		parent::__construct();
+		$this->load->model('Asientos');
+	}
+
+	public function index(){ //$permission
+		$this->load->view('include/header_admin');
+		 //$this->load->view('include/navbar_admin');
+		 $this->load->view('include/footer_admin');
+
+		$data['list'] = $this->Asientos->asientos_List();
+		//$data['permission'] = $permission;
+
+		       $this->load->view('asientos/view_',$data);
+	}
+
+	// public function index($permission){
+		
+	// 	$data['list'] = $this->Asientos->asientos_List();
+	// 	$data['permission'] = $permission;
+		
+ //        $this->load->view('asientos/view_',$data);
+	// }
+
+	public function setAsiento(){		
+		
+		$da = $this->input->post();
+		$cantidad =count($da);
+
+		// si trae solo 1 asiento
+		if (count($da) == 2) {
+			
+			// con id de asiento y fila traigo id de relacion
+			$data['fila'] = $this->input->post('1fila');
+			$data['asiento'] = $this->input->post('1asiento');	
+			
+			// guardo id, dni de alum y de tutor en array
+			$id['1'] = $this->Asientos->getIdAsientos($data);
+			$id['dni_alumno'] = $this->input->post('dni_alumno');
+			$id['dni_tutor'] = $this->input->post('dni_tutor');
+			
+			// guardo reserva envio array y traigo id de reserva
+			$id_insert= $this->Asientos->setAsientos($id);
+			
+			// con id de reserva guardo deta reserva
+			$response = $this->Asientos->setDetaAsientos($id_insert,$id);
+			echo json_encode($response);
+		}else{
+			
+			// con id de asiento y fila traigo id de relacion de los dos asientos
+			$data['fila'] = $this->input->post('1fila');
+			$data['asiento'] = $this->input->post('1asiento');	
+			$id['1'] = $this->Asientos->getIdAsientos($data);
+			//guardo los dos ids
+			$data['fila'] = $this->input->post('2fila');
+			$data['asiento'] = $this->input->post('2asiento');	
+			$id['2'] = $this->Asientos->getIdAsientos($data);
+
+			// guardo id, dni de alum y de tutor en array
+			$id['dni_alumno'] = $this->input->post('dni_alumno');
+			$id['dni_tutor'] = $this->input->post('dni_tutor');
+			
+			// guardo los dos reservas
+			$id_insert= $this->Asientos->setAsientos($id);
+			// con ids gurado los detareserva
+			$response = $this->Asientos->setDetaAsientos($id_insert,$id);
+			echo json_encode($response);
+		}
+	}
+}

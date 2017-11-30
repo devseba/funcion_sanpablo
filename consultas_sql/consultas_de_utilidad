@@ -1,0 +1,16 @@
+SELECT tbl_reserva.dni_alumno, alumnos.apellido, alumnos.nombre, tbl_butaca.fila, tbl_butaca.nro_butaca FROM `tbl_butaca`
+JOIN deta_reserva ON deta_reserva.id_butaca = tbl_butaca.id_butaca
+JOIN tbl_reserva ON tbl_reserva.id_reserva = deta_reserva.id_reserva
+JOIN alumnos ON tbl_reserva.dni_alumno = alumnos.documento
+WHERE tbl_butaca.fila = 16 AND tbl_butaca.nro_butaca IN (26,28,30)
+
+SELECT COUNT(id_butaca) cantidad FROM tbl_butaca WHERE fila < 21 AND estado = 'RT';
+SELECT COUNT(id_butaca) cantidad FROM tbl_butaca WHERE fila >= 21 AND estado = 'RT';
+
+SELECT *  FROM `tbl_reserva` JOIN deta_reserva ON deta_reserva.id_reserva = tbl_reserva.id_reserva WHERE `dni_alumno` = 0
+
+SELECT * 
+FROM `tbl_reserva` 
+JOIN deta_reserva ON deta_reserva.id_reserva = tbl_reserva.id_reserva 
+JOIN tbl_butaca ON tbl_butaca.id_butaca = deta_reserva.id_butaca 
+WHERE `dni_alumno` = 0

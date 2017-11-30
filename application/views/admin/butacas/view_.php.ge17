@@ -1,0 +1,878 @@
+   <div class="conteiner"> 
+    <div class="col-xs-12" id="ubicacion" style="background-color: #fff;">
+      <div class="box">
+        <div class="box-header">
+        <center>
+          <h3 class="box-title" style="color: #000; ">Ubicaciones</h3>
+        </center>  
+           <?php
+           if (isset($_SESSION['email'])){
+                   if($_SESSION['username']=='admin'){
+                    echo '<ion-footer-bar>';
+  
+                  echo '<button type="button" class="button button-light pull-right" id="listado" onclick="listado()" style="text-align: right"> Ver listado </button>';
+
+               
+                  echo '<button type="button" class="button button-clear pull-right"    data-toggle="modal" data-target="#modallibre"> Entregar reservas</button>';
+                  echo '</ion-footer-bar>';
+
+                     }
+                }
+           ?>
+          
+          <label class="sel" for="cantidad" >Cantidad de entradas </label>
+          <td><select name="cantidad" class="cantidad sel" id="cantidad">
+                <option value="0">Seleccione...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+          </select></td>
+          <h5 style="color: #000; ">Referencias</h5>   
+
+          </br>      
+          <?php
+
+              echo '<button type="button" class="btn btn-success btn-xs ref" id="libre"  data-toggle="modal" data-target="#modalasiento">Asientos Libres</button>';          
+              echo '<button type="button" class="btn btn-primary btn-xs ref" id="reserva"  data-toggle="modal" data-target="#modalasiento">Asientos Reservados</button>'; 
+               echo '<button type="button" class="btn btn-danger btn-xs ref" id="ocupados"  data-toggle="modal" data-target="#modalasiento">Asientos ocupados</button>';        
+              echo '<button type="button" class="btn btn-warning btn-xs ref" id="retiradas"  data-toggle="modal" data-target="#modalasiento">Entradas Retiradas</button>';
+
+          ?>
+        
+          
+        </div><!-- /.box-header -->
+        <div class="box-body" style="background-color: #fff;">   
+        <br>
+        <br>
+      
+         <table id="customers" class="table table-bordered table-hover" style="color: #000; ">
+             <thead>
+               <tr>
+                 
+                 <th >FILAS</th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 
+                 <th class="dark"></th> 
+                 
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>                
+               </tr>
+             </thead>
+             <tbody>            
+
+             <?php           
+                 echo '<tr id="" class="">';
+                     $y = 14;
+                     $z=0;
+
+                     echo '<td class="" id="">';
+                     echo "fila 1";
+                     echo '</td>';
+
+                     for($i=0; $i < count($list); $i++){
+
+                       $butaca = ($list[$i]['nro_butaca']);
+
+                                   
+                         echo '<td class="'.$list[$i]['fila'].'" id="'.$list[$z]['nro_butaca'].'">';
+
+                        switch ($list[$i]['estado']) {
+                            case 'D':
+                                echo '<img class="asiento habilitada" src="'.base_url().'/assets/img/D.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'O':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/O.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'RE':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/RE.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'RT':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/RT.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'AN':
+                               // echo '<img class="asiento" src="assets/img/sillon.png">'.$list[$z]["nro_butaca"].'';
+                                break;  
+                               
+                        }
+                         echo '</td>';  
+                        
+                        if ($y == $i){
+                            echo '<td class="dark">';
+                            echo '</td>';
+                            $y = $y+30;
+                         }                        
+
+                        if ($butaca%30 == 0){
+                            echo '</tr>';
+                            echo '<tr id="" class="">';
+                           
+                            if (($list[$i]['fila']<20) && ($list[$i]['fila']!==1)) {
+                               
+                               $f = $list[$i]['fila'] + 1;
+                               echo '<td class="" id="">'; 
+                               echo "fila ".$f;
+                               echo '</td>';
+                             }
+                             
+                         }
+
+                         $z++;
+
+                      }
+                  echo '</tr>';
+             ?>
+
+             </tbody>
+         </table>
+
+
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div> <!-- /.row -->
+
+
+<script>    
+
+    var cont = 0;
+    var fila1;
+    var asiento1;
+    var fila2;
+    var asiento2;
+    var fila = 0;
+    var asiento = 0;
+    var cant = 0;
+    var idgl="";
+$(document).ready(function(event) {
+ 
+  //  guarda la cantidad de asientos seleccionados
+  $('#cantidad').change(
+    function(){
+      cant = $(this).val();
+    } 
+  );
+
+  $(".habilitada").click(function(){  
+      // validacion de seleccion de asientos  
+      if (cant == 0){
+        alert("Seleccione cantidad de asientos...");
+        return;
+      }
+      // cuenta cantidad de clicks
+      cont++;
+      // oculta labutaca al hacer click
+      $(this).fadeOut();
+      // guarda asiento y fila en cada click  
+      fila = parseInt($(this).parent('td').attr('class'));
+      asiento = parseInt($(this).parent('td').attr('id'));
+
+      if (cont == 1) {
+        fila1 = fila;
+        asiento1 = asiento;              
+      }
+      if (cont == 2) {
+        fila2 = fila;
+        asiento2 = asiento;            
+      }
+
+      if((cant == cont) && (cant== 1)){  
+
+          $("form#conform").append('<label for="1fila">Fila: </label>');
+          $("form#conform").append('<input class="conf" type="text" name="1fila" id="1fila">');
+          
+          $("form#conform").append('<label for="1asiento">Asiento: </label>');
+          $("form#conform").append('<input class="conf" type="text" name="1asiento" id="1asiento"> </br>');
+
+          $("#1fila").val(fila1);
+          $("#1asiento").val(asiento1);  
+
+          $('#confirmar').modal('show'); 
+          cont = 0;
+      } 
+      if((cant == cont) && (cant== 2)){           
+          
+          $("form#conform").append('<label for="1fila">Fila: </label> <input class="conf" type="text" name="1fila" id="1fila">');
+          //$("form#conform").append('<input class="conf" type="text" name="1fila" id="1fila">');
+          
+          $("form#conform").append('<label for="1asiento">Asiento: </label> <input class="conf" type="text" name="1asiento" id="1asiento"> </br>');
+          //$("form#conform").append('<input class="conf" type="text" name="1asiento" id="1asiento"> </br>');
+
+          $("form#conform").append('<label for="2fila">Fila: </label> <input class="conf" type="text" name="2fila" id="2fila">');
+          //$("form#conform").append('<input class="conf" type="text" name="2fila" id="2fila">');
+          
+          $("form#conform").append('<label for="2asiento">Asiento: </label> <input class="conf" type="text" name="2asiento" id="2asiento"> </br>');
+          //$("form#conform").append('<input class="conf" type="text" name="2asiento" id="2asiento"> </br>');
+
+          $("#1fila").val(fila1);
+          $("#1asiento").val(asiento1);
+           
+          $("#2fila").val(fila2);
+          $("#2asiento").val(asiento2);
+          $('#confirmar').modal('show');
+          cont = 0;
+     }
+  });
+
+  $("#btnCancelar").click(function(){
+      cont = 0;
+      fila1 = 0;
+      asiento1 = 0;
+      fila2 = 0;
+      asiento2 = 0;
+      $(".habilitada").fadeIn('slow');
+      $("form#conform").empty();
+  });  
+
+  $("#dni").change(function(){   
+
+      $("#dnitabl tbody tr").remove(); 
+      idgl = $("select#dni option:selected").html(); 
+      console.log("El dni de alumno cuando hace click");
+      console.log(idgl);
+      $.ajax({
+              type: 'POST',
+              data: { idgl: idgl},
+              url: '<?php echo base_url(); ?>/admin/Butaca/traerbutaca', 
+              success: function(data){
+                      console.log("Estoy en reserva entrada");
+                      console.log(data);
+                     // console.log(data[0]['dni_alumno']); 
+                      
+                      for(var i=0; i < data.length ; i++){
+                        //var i=0;
+                        //if (data[i]['estado']== 'RE'){
+
+                        var estado= '<small class="label pull-left bg-blue">Reservada</small>';
+                        var  table= "<tr id='"+data[i]['id_butaca']+"'>"+   
+                                    
+                                     "<td style='text-align: center'>"+data[i]['fila']+"</td>"+
+                                     "<td tyle='text-align: center'>"+data[i]['nro_butaca']+"</td>"+
+                                     "<td style='text-align: center'>"+estado+"</td>"+
+                                                                   
+                                   "</tr>";
+                            $('#dnitabl').append(table); 
+                           
+                         // }
+                        // i++;
+                          
+                      }
+
+                    },
+                
+              error: function(result){
+                            
+                      console.log(result);
+                    },
+              dataType: 'json'
+      });      
+  });
+
+  //Listado de asientos libres 
+  $("#libre").click(function (e) { 
+    $("#modalasiento tbody tr").remove();  
+    $.ajax({
+        type: 'POST',
+        data: {},
+        url: '<?php echo base_url(); ?>/admin/Butaca/asientos_libres', //index.php/
+        success: function(data){
+              console.log("Asientos libres");           
+              console.log(data);
+             // console.log(data[0]['fila']);
+              for (var i = 0; i < data.length; i++) {
+                if (data[i]['estado']== 'D'){
+                var estado= '<small class="label pull-left bg-green" style="background-color: #38CD55  ;">Disponibles</small>';
+                }
+                else 
+                  if (data[i]['estado']== 'RE'){
+                  var estado= '<small class="label pull-left bg-blue" style="text-align: center">Reservados</small>';
+                  }
+                  else
+                    if (data[i]['estado']== 'O'){ 
+                    var estado= '<small class="label pull-left bg-red" style="text-align: center">Ocupados</small>';
+                    }
+                      else{ 
+                        var estado= '<small class="label pull-left bg-yellow" style="text-align: center">Retiradas</small>';
+                      }
+                var tr = "<tr >"+
+                    
+                    "<td style='text-align: center'>"+data[i]['fila']+"</td>"+
+                    "<td style='text-align: center'>"+data[i]['nro_butaca']+"</td>"+
+                   "<td style='text-align: center'>" +estado+"</td>";
+                     
+                    "</tr>";
+                $('#tabla_inscriptos tbody').append(tr);
+
+              }
+              console.log(tr);
+              },
+          
+        error: function(result){
+              
+              console.log(result);
+            },
+            dataType: 'json'
+        });
+
+  }); 
+
+  $("#reserva").click(function (e) { 
+
+      $("#modalasiento tbody tr").remove();   
+      $.ajax({
+          type: 'POST',
+          data: {},
+          url: '<?php echo base_url(); ?>/admin/Butaca/asientos_reserva', //index.php/
+          success: function(data){
+                console.log("Asientos Reservados");           
+                console.log(data);
+                
+              
+                for (var i = 0; i < data.length; i++) {
+                  if (data[i]['estado']== 'D'){
+                  var estado= '<small class="label pull-left bg-green" style="text-align: center">Disponibles</small>';
+                  }
+                  else 
+                    if (data[i]['estado']== 'RE'){
+                    var estado= '<small class="label pull-left bg-blue" style="background-color: #007fa6  ;">Reservados</small>';
+                    }
+                    else
+                      if (data[i]['estado']== 'O'){ 
+                      var estado= '<small class="label pull-left bg-red" style="text-align: center">Ocupados</small>';
+                      }
+                        else{ 
+                          var estado= '<small class="label pull-left bg-yellow" style="text-align: center">Retiradas</small>';
+                        }
+                  var tr = "<tr >"+
+                      
+                      "<td style='text-align: center'>"+data[i]['fila']+"</td>"+
+                      "<td style='text-align: center'>"+data[i]['nro_butaca']+"</td>"+
+                     "<td style='text-align: center'>" +estado+"</td>";
+                       
+                      "</tr>";
+                  $('#tabla_inscriptos tbody').append(tr);
+
+                }
+                console.log(tr);
+                },
+            
+          error: function(result){
+                
+                console.log(result);
+              },
+              dataType: 'json'
+          });
+  
+    
+  });
+  $("#ocupados").click(function (e) { 
+      $("#modalasiento tbody tr").remove();   
+      $.ajax({
+          type: 'POST',
+          data: {},
+          url: '<?php echo base_url(); ?>/admin/Butaca/asientos_ocupados', //index.php/
+          success: function(data){
+                console.log("Asientos Reservados");           
+                console.log(data);
+                
+              
+                for (var i = 0; i < data.length; i++) {
+                  if (data[i]['estado']== 'D'){
+                  var estado= '<small class="label pull-left bg-green" style="text-align: center">Disponibles</small>';
+                  }
+                  else 
+                    if (data[i]['estado']== 'RE'){
+                    var estado= '<small class="label pull-left bg-blue" style="text-align: center">Reservados</small>';
+                    }
+                    else
+                      if (data[i]['estado']== 'O'){ 
+                      var estado= '<small class="label pull-left bg-red" style="background-color: #ff0000  ;">Ocupados</small>';
+                      }
+                        else{ 
+                          var estado= '<small class="label pull-left bg-yellow" style="text-align: center">Retiradas</small>';
+                        }
+                  var tr = "<tr >"+
+                      
+                      "<td style='text-align: center'>"+data[i]['fila']+"</td>"+
+                      "<td style='text-align: center'>"+data[i]['nro_butaca']+"</td>"+
+                     "<td style='text-align: cente'>" +estado+"</td>";
+                       
+                      "</tr>";
+                  $('#tabla_inscriptos tbody').append(tr);
+
+                }
+                console.log(tr);
+                },
+            
+          error: function(result){
+                
+                console.log(result);
+              },
+              dataType: 'json'
+          });
+  
+  });
+    
+  $("#retiradas").click(function (e) { 
+        $("#modalasiento tbody tr").remove();   
+        $.ajax({
+            type: 'POST',
+            data: {},
+            url: '<?php echo base_url(); ?>/admin/Butaca/asientos_retiradas', //index.php/
+            success: function(data){
+                  console.log("Asientos Retiradas");           
+                  console.log(data);
+                  
+                
+                  for (var i = 0; i < data.length; i++) {
+                    if (data[i]['estado']== 'D'){
+                    var estado= '<small class="label pull-left bg-green" style="text-align: center">Disponibles</small>';
+                    }
+                    else 
+                      if (data[i]['estado']== 'RE'){
+                      var estado= '<small class="label pull-left bg-blue" style="text-align: center">Reservados</small>';
+                      }
+                      else
+                        if (data[i]['estado']== 'O'){ 
+                        var estado= '<small class="label pull-left bg-red" style="text-align: center">Ocupados</small>';
+                        }
+                          else{ 
+                            var estado= '<small class="label pull-left bg-yellow" style="background-color: #FFC300  ;">Retiradas</small>';
+                          }
+                    var tr = "<tr >"+
+                        
+                        "<td style='text-align: center'>"+data[i]['fila']+"</td>"+
+                        "<td style='text-align: center'>"+data[i]['nro_butaca']+"</td>"+
+                       "<td style='text-align: cente'>" +estado+"</td>";
+                         
+                        "</tr>";
+                    $('#tabla_inscriptos tbody').append(tr);
+
+                  }
+                  console.log(tr);
+                  },
+              
+            error: function(result){
+                  
+                  console.log(result);
+                },
+                dataType: 'json'
+            });
+    
+  });
+
+});
+
+  function guardar(){
+
+      var data = $("#conform").serializeArray();
+      $.ajax({
+          type: 'POST',
+          data: data,
+          //url: 'index.php/Asiento/setAsiento',
+          url: '<?php echo base_url(); ?>/admin/Butaca/setAsiento',
+          success: function(result){
+                          
+                  $('#confirmar').modal('hide');
+                  //local volver
+                  //setTimeout("cargarView('Asiento', 'index', '"+$('#permission').val()+"');",0)
+                  $('#ubicacion').empty();
+                  $("#ubicacion").load("<?php echo base_url(); ?>/Butaca/index");
+                  comprobante();        
+                      },
+          error: function(result){
+                      
+                      alert("Ha habido un error de guardado...");
+                  },
+          dataType: 'json'
+      });
+  }  
+  function listado(){
+  
+    $('#ubicacion').empty();
+    $("#ubicacion").load("<?php echo base_url(); ?>/admin/Butaca/cargardni/");
+                            
+  }
+  traer_dni();
+  function traer_dni(){
+    $('#dni').val(''); 
+    $.ajax({
+        type: 'POST',
+        data: { },
+        url: '<?php echo base_url(); ?>/admin/Butaca/getdni', //index.php/
+        success: function(data){
+               
+                   var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+                  $('#dni').append(opcion); 
+                for(var i=0; i < data.length ; i++) 
+                {    
+                  if( data[i]['estado']=='RE'){
+                      var nombre = data[i]['dni_alumno'];
+                      var opcion  = "<option value='"+data[i]['id_reserva']+"'>" +nombre+ "</option>" ; 
+
+                    $('#dni').append(opcion); 
+                   }                
+                }
+              },
+        error: function(result){
+              
+              console.log(result);
+            },
+            dataType: 'json'
+    });
+  }
+//listo
+  function entregar(){
+
+   console.log("Estoy cambiando a retirada el estado de butacas");
+   console.log("El dni del alumno es :");
+   console.log(idgl);
+                                                                                  
+    $.ajax({
+      type: 'POST',
+      data: {idgl:idgl},
+      url: '<?php echo base_url(); ?>admin/Butaca/RetirarEntrada', //index.php/
+      success: function(data){
+  
+            console.log("Exito en entregar reserva");
+            console.log(data);
+             // $('#confirmar').modal('show');
+             
+            $("#modallibre tbody tr").remove();
+            $("#dni").val('');   
+
+          },
+        
+      error: function(result){
+            console.log("Entre por el error");
+            console.log(result);
+          }
+         // dataType: 'json'
+    });
+  }
+//listo
+  function anular(){
+
+   console.log("Estoy cambiando a retirada el estado de butacas");
+   console.log("El dni del alumno es :");
+   console.log(idgl);
+                                                                                  
+    $.ajax({
+      type: 'POST',
+      data: {idgl:idgl},
+      url: '<?php echo base_url(); ?>admin/Butaca/AnularReserva', //index.php/
+      success: function(data){
+  
+            console.log("Exito en entregar reserva");
+            console.log(data);
+             // $('#confirmar').modal('show');
+            $("#modallibre tbody tr").remove();
+            $("#dni").val('');   
+
+          },
+        
+      error: function(result){
+            console.log("Entre por el error");
+            console.log(result);
+          }
+         // dataType: 'json'
+    });
+  }
+  // function comprobante(){
+  //   $('#imprimi').modal('show');
+  // }
+
+  // function imprimir(){
+
+  //   console.log("Estoy imprimiendo un retiro de reserva");
+  //   console.log("fila ");
+  //   console.log(fila1);
+  //   console.log("asientos");
+  //   console.log(asiento1);
+  //   $.ajax({
+  //       type: 'POST',
+  //       data: {fila1:fila1, asiento1:asiento1, fila2:fila2, asiento2:asiento2 },
+  //       url: '<?php //echo base_url(); ?> /Asiento/getimprimir', 
+  //       success: function(data){
+             
+  //             console.log("Entre a la impresion");
+  //             console.log(data);
+  //             var  texto =
+  //                         '<div class="" id="vistaimprimir">'+
+  //                            '<div class="container">'+
+  //                              '<div class="thumbnail">'+
+  //                               '<div class="caption">'+
+  //                                    '<div class="row" >'+
+  //                                      '<div class="panel panel-default">'+
+  //                                        '<div class="form-group">'+
+  //                                          '<h3 class="text-center" align="center"></h3>'+
+  //                                        '</div>'+
+  //                                        '<hr/>'+
+  //                                        '<div class="panel-body">'+
+  //                                          '<div class="container">'+
+  //                                             '<div class="thumbnail">'+
+  //                                                '<div class="row">'+
+  //                                                  '<div class="col-sm-12 col-md-12">'+
+  //                                                    '<table width="100%" style="text-align:justify" >'+
+  //                                                      '<tr>'+
+  //                                                        '<tr>'+
+  //                                                          '<td  colspan="1"  align="left" >'+
+  //                                                            '<div class="text-left">  alt="Colegio San Pablo" title="Colegio San Pablo" width="280" height="80"/></div></td>'+
+  //                                                            '</td>'+ 
+  //                                                            '<td >'+
+  //                                                              '<div  class="col-md-4 "><h3> COMPROBANTE</h3>'+
+  //                                                              '</div>'+
+                                                              
+  //                                                             '</td>'+
+
+  //                                                         '</tr>'+
+  //                                                       '</tr>'+
+  //                                                     '</table>'+
+  //                                                   '</div>'+
+  //                                                 '</div>'+
+  //                                                 '<div class="row">'+
+  //                                                  '<div class="col-sm-12 col-md-12">'+
+  //                                                    '<h3>Función de fin de año de nivel inicial FANTASÍA, organizada por el colegio SAN PABLO</h3>'+
+  //                                                    '<br>'+
+  //                                                    '<table width="100%" style="text-align:justify" border="1px solid black">'+                                             
+  //                                                       '<tr>'+
+  //                                                          '<td>Fila</td>'+
+  //                                                          '<td>'+fila1+'</td>'+
+  //                                                          '<td style="text-align: left"" >Asiento</td>'+
+  //                                                         '<td></td>'+
+  //                                                       '</tr>'+
+  //                                                     '</table>'+
+  //                                                   '</div>'+
+  //                                                 '</div>'+
+  //                                                 '<br>'+
+  //                                                 '<br>'+
+  //                                                 '<div class="row">'+
+  //                                                  '<div class="col-sm-12 col-md-12">'+
+  //                                                    '<h3> Tiene un plazo de dos dia apartir de la fecha para retirar la Entrada </h3>'+
+  //                                                   '</div>'+
+  //                                                 '</div>'+
+  //                                                 '<div class="col-sm-6 col-md-6" border="1" >'+
+  //                                                   '<div class="col-sm-12 col-md-12">'+
+                                                    
+  //                                                    '<p class="bluetxt">La función se realizará el día martes 28 de noviembre en el teatro Sarmiento (Av. Alem 34 Norte - Capital) desde las 20:00 hs.</p>'+
+  //                                                   '</div>'+
+  //                                                 '</div>'+
+  //                                                 '<br>'+
+  //                                                 '<br>'+
+
+                                                  
+                                                   
+                                             
+  //                                             '</div>'+
+  //                                           '</div>'+
+  //                                         '</div>'+
+
+                                             
+  //                                       '</div>'+
+  //                                     '</div>'+
+  //                               '</div>'+
+  //                             '</div>'+
+  //                         '</div>'+
+  //                         '<style>'+
+  //                                   '.table, .table>tr, .table>td  {} '+
+  //                         '</style>';
+  //                                //border:  1px solid black;
+
+
+  //                                        var mywindow = window.open('', 'Imprimir', 'height=700,width=900');
+  //                                         mywindow.document.write('<html><head><title></title>');
+  //                                          //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+  //                                          //mywindow.document.write('<link rel="stylesheet" href="main.css">
+  //                                          mywindow.document.write('</head><body onload="window.print();">');
+  //                                          mywindow.document.write(texto);
+  //                                          mywindow.document.write('</body></html>');
+
+  //                                          mywindow.document.close(); // necessary for IE >= 10
+  //                                          mywindow.focus(); // necessary for IE >= 10
+  //                                          //mywindow.print();
+  //                                          //mywindow.close();
+  //                                          return true; 
+  //                                       },
+
+  //               error: function(result){
+
+  //                         console.log(result);
+  //                         console.log("error en la vistaimprimir");
+  //                                       },
+  //                     dataType: 'json'
+  //     });
+  // }
+
+
+
+
+</script>  
+
+<style>
+    .conf{
+        border: none;
+        width: 8%;    
+    }
+    /*.dark{
+        background-color: red;
+    }*/
+    .ref{margin-left: 15px;}
+    #confirmar{
+        background-color: #fff !important;
+        color: #000;    }
+</style>
+
+  <!--  Modal Guardar -->
+  <div class="modal fade" id="confirmar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" >
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span><center> Confirmar</center></h4> 
+        </div>
+        <div class="modal-body" id="modalBodydestAgre">
+            <p>Las butacas seleccionadas son: </p>
+            <form id="conform" class="center">
+                
+                <input class="conf" type="hidden" name="dni_alumno" id="" value="<?php echo $_SESSION['dni_alumno'] ?>">
+                <input class="conf" type="hidden" name="dni_tutor" id="" value="0">
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelar" onclick="">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardar()" 
+          id="btnSavedest">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--  Modal pregunta para imprimir-->
+  <div class="modal fade" id="imprimi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> COMPROBANTE </h4> 
+        </div>
+        <div class="modal-body" id="modalBodydestAgre">
+            <p>¿Desea imprimir comprobante ?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelar" onclick="">No</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="imprimir()" 
+          id="btnSavedest">SI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- /  Modal Agregar Destino-->
+<!-- Modal Asientos libres --> 
+  <div class="modal fade" id="modalasiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <center><h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span><label> Butacas </label></h4>
+          </center>
+          <br>
+          
+        </div> <!-- /.modal-header   class="table table-bordered table-hover" -->
+
+
+        <div class="modal-body">
+        <div class="col-sm-12 col-md-12">
+          <table id="tabla_inscriptos"  class="table table-bordered table-hover">
+            <thead>                        
+              <tr>                          
+                <th style="text-align: center">Fila </th>
+                <th style="text-align: center">Nro de butaca </th>  
+                <th style="text-align: center">Estado </th>                
+              
+              </tr>  
+            </thead>
+            <tbody>   </tbody>
+          </table>
+        </div>                  
+
+        </div> <!-- /.modal-body -->
+
+        <div class="modal-footer">  
+
+          
+        </div>  <!-- /.modal footer -->
+      </div> <!-- /.modal-content -->
+
+    </div>  <!-- /.modal-dialog modal-lg -->
+  </div>  <!-- /.modal fade -->
+
+  <div class="modal fade" id="modallibre" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <center><h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span><label> Entrega de reserva </label></h4>
+          </center>
+          <br>
+          
+        </div> <!-- /.modal-header   class="table table-bordered table-hover" -->
+
+
+        <div class="modal-body">
+        <div class="col-sm-12 col-md-12">
+        <p></p>
+        <div class="col-xs-4">Dni de alumno
+                <select type="text" id="dni" name="dni" class="form-control" value=""> 
+                </select>    
+        </div>
+
+          <table id="dnitabl" class="table table-bordered table-hover">
+            <thead>                        
+              <tr>  
+                                   
+                <th style="text-align: center">Fila </th>
+                <th style="text-align: center">Nro de butaca </th>  
+                <th style="text-align: center">Estado </th>                
+              
+              </tr>  
+            </thead>
+            <tbody>   </tbody>
+          </table>   
+          </div>               
+
+        </div> <!-- /.modal-body -->
+
+        <div class="modal-footer">  
+            <center>
+            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" onclick="entregar()">ENTREGAR</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="anular()" >ANULAR</button>
+            </center>
+        </div>  <!-- /.modal footer -->
+      </div> <!-- /.modal-content -->
+
+    </div>  <!-- /.modal-dialog modal-lg -->
+  </div>  <!-- /.modal fade -->

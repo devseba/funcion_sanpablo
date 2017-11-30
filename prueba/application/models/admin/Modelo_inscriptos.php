@@ -1,0 +1,91 @@
+<?php
+     class Modelo_inscriptos extends CI_Model {
+
+        public function __construct()
+        {
+            // Call the CI_Model constructor
+            parent::__construct();
+            $this->load->database();
+        }
+
+        public function getInscriptos(){
+            $fields = $this->db->field_data('asiste');
+            $query = $this->db
+                        ->select('apellido,
+                                nombre,
+                                dni,
+								correo,
+                                IF(sexo = "m","masculino","femenino") sexo,
+								telefono,
+								retiro,
+								fecha_retiro,
+								docente
+								')
+								
+                        ->get('asiste');
+			
+            return array("fields" => $fields, "query" => $query);   
+        }
+		
+		//public function retiro_entrada($dni, $valor){
+		public function retiro_entrada($campo_post){
+            $dni = $campo_post['dni'];
+            $valor = $campo_post['value'];  
+            			
+			$sql_user = "SELECT * FROM asiste WHERE dni = '".$dni."'";
+			$query_user= $this->db->query($sql_user);
+			
+			if($valor == 0){
+				$sql_update = "UPDATE asiste SET  retiro = '".$valor."' AND fecha_retiro =  '0000-00-00 00:00:00' WHERE  dni='".$dni."'";
+				
+				$query_user = $this->db->query($sql_update);
+			}else{
+				if($query_user->num_rows() > 0){  // si existe el alumno.
+				   $sql_update = "UPDATE asiste SET  retiro = '".$valor."' WHERE  dni='".$dni."'";
+				
+				  $query_user = $this->db->query($sql_update);
+				
+				   return true;
+				}else{
+				  return false;
+				}
+			}
+			
+		}
+		
+		public function get_cantidad_retiro_entradas(){
+			$sql_user = "SELECT * FROM asiste WHERE retiro = 1";
+			$query_user= $this->db->query($sql_user);
+			if($query_user->num_rows() > 0){
+				return $query_user->num_rows();
+			}else{
+				return 0;
+			}
+		}
+		
+		public function is_docente($campo_post){
+            $dni = $campo_post['dni'];
+            $valor = $campo_post['value'];  
+            			
+			$sql_user = "SELECT * FROM asiste WHERE dni = '".$dni."'";
+			$query_user= $this->db->query($sql_user);
+			
+			if($valor == 0){
+				$sql_update = "UPDATE asiste SET  docente = '".$valor."' WHERE  dni='".$dni."'";
+				
+				$query_user = $this->db->query($sql_update);
+			}else{
+				if($query_user->num_rows() > 0){  // si existe el alumno.
+				   $sql_update = "UPDATE asiste SET  docente = '".$valor."' WHERE  dni='".$dni."'";
+				
+				  $query_user = $this->db->query($sql_update);
+				
+				   return true;
+				}else{
+				  return false;
+				}
+			}
+			
+		}
+		
+}		

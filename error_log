@@ -1,0 +1,19 @@
+[01-Nov-2017 17:28:41 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 17:41:49 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 17:41:51 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 17:45:02 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 17:53:18 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 17:58:21 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:02 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:04 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:28 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:29 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:30 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:31 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:31 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:32 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[01-Nov-2017 18:01:34 America/Argentina/Buenos_Aires] PHP Fatal error:  Can't use method return value in write context in /home3/lopeb2d/public_html/manes_local/application/controllers/Inicio.php on line 43
+[12-Nov-2017 20:03:24 America/Argentina/Buenos_Aires] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home3/lopeb2d/public_html/funcion/application/models/Asientos.php on line 182
+[12-Nov-2017 20:03:25 America/Argentina/Buenos_Aires] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home3/lopeb2d/public_html/funcion/application/models/Asientos.php on line 182
+[12-Nov-2017 20:03:27 America/Argentina/Buenos_Aires] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home3/lopeb2d/public_html/funcion/application/models/Asientos.php on line 182
+[12-Nov-2017 20:03:28 America/Argentina/Buenos_Aires] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home3/lopeb2d/public_html/funcion/application/models/Asientos.php on line 182

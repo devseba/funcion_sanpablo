@@ -1,0 +1,297 @@
+
+
+   <div class="conteiner"> 
+  <div class="row">
+    <div class="col-xs-12" id="ubicacion" style="background-color: #">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title" style="color: #000; ">Ubicaciones</h3>
+          </br></br>
+          <label >Cantidad de entradas </label>
+          <td><select name="cantidad" class="cantidad" id="cantidad">
+                <option value="0">Seleccione...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+          </select></td>
+
+          </br>
+          <h5 style="color: #000; ">Referencias</h5>          
+          <?php
+        //  if( permisos){ permisos para el admin que os btn tengan accion 
+              echo '<button type="button" class="btn btn-success btn-xs ref">Asientos Libres</button>';          
+              echo '<button type="button" class="btn btn-primary btn-xs ref">Reservados</button>';         
+              echo '<button type="button" class="btn btn-warning btn-xs ref">Vendidos</button>';
+        //  }  else{
+              // modal ingresa el dni del alumno y se cambia el estado de las butaas y de la reserva a Entregado
+              echo '<button type="button" class="btn btn-info btn-xs ref">Entregar Reserva</button>';
+              echo '<button type="button" class="btn btn-danger btn-xs ref">Anular Reserva</button>';
+
+        //  }
+
+
+
+          ?>
+                          
+          
+        </div><!-- /.box-header -->
+        <div class="box-body" style="background-color: #fff;">
+         
+          <table id="customers" class="table table-bordered table-hover" style="color: #000; ">
+              <thead>
+                <tr>
+                  
+                  <th>FILAS</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  
+                  <th class="dark"></th> 
+                  
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>                
+                </tr>
+              </thead>
+              <tbody>            
+
+             
+              <?php           
+                  echo '<tr id="" class="">';
+                      $y = 14;
+                      $z=0;
+
+                      echo '<td class="" id="">';
+                      echo "fila 1";
+                      echo '</td>';
+
+                      for($i=0; $i < count($list); $i++){
+
+                        $butaca = ($list[$i]['nro_butaca']);
+
+                                    
+                          echo '<td class="'.$list[$i]['fila'].'" id="'.$list[$z]['nro_butaca'].'">';
+
+                          switch ($list[$i]['estado']) {
+                            case 'D':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/D.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'O':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/O.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'RE':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/RE.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'RT':
+                                echo '<img class="asiento" src="'.base_url().'/assets/img/RT.png">'.$list[$z]["nro_butaca"].'';
+                                break;
+                            case 'AN':
+                               // echo '<img class="asiento" src="assets/img/sillon.png">'.$list[$z]["nro_butaca"].'';
+                                break;    
+                          }
+                          
+                          echo '</td>';  
+                         
+                         if ($y == $i){
+                             echo '<td class="dark">';
+                             echo '</td>';
+                             $y = $y+30;
+                          }                        
+
+                         if ($butaca%30 == 0){
+                             echo '</tr>';
+                             echo '<tr id="" class="">';
+
+                            
+                             if (($list[$i]['fila']<20) && ($list[$i]['fila']!==1)) {
+                                
+                                $f = $list[$i]['fila'] + 1;
+                                echo '<td class="" id="">'; 
+                                echo "fila ".$f;
+                                echo '</td>';
+                              }
+                              
+                          }
+
+                          $z++;
+
+                       }
+                   echo '</tr>';
+              ?>
+
+              </tbody>
+          </table>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div><!-- /.col -->
+  </div><!-- /.row -->
+</div>
+
+<script>    
+
+    var cont = 0;
+    var fila1;
+    var asiento1;
+    var fila2;
+    var asiento2;
+    var fila = 0;
+    var asiento = 0;
+    var cant = 0;
+
+    //  guarda la cantidad de asientos seleccionados
+    $('#cantidad').change(
+      function(){
+        cant = $(this).val();
+      } 
+    );
+
+    $(".asiento").click(function(){  
+      // validacion de seleccion de asientos  
+      if (cant == 0){
+        alert("Seleccione cantidad de asientos...");
+        return;
+      }
+      // cuenta cantidad de clicks
+      cont++;
+      // oculta labutaca al hacer click
+      $(this).fadeOut();
+      // guarda asiento y fila en cada click  
+      fila = parseInt($(this).parent('td').attr('class'));
+      asiento = parseInt($(this).parent('td').attr('id'));
+
+      if (cont == 1) {
+        fila1 = fila;
+        asiento1 = asiento;              
+      }
+      if (cont == 2) {
+        fila2 = fila;
+        asiento2 = asiento;            
+      }
+
+      if((cant == cont) && (cant== 1)){  
+
+           $("#1fila").val(fila1);
+           $("#1asiento").val(asiento1);           
+           $('#confirmar').modal('show'); 
+           cont = 0;
+      } 
+      if((cant == cont) && (cant== 2)){           
+          $("#1fila").val(fila1);
+          $("#1asiento").val(asiento1);
+           
+          $("#2fila").val(fila2);
+          $("#2asiento").val(asiento2);
+          $('#confirmar').modal('show');
+          cont = 0;
+     }
+    });
+
+    $("#btnCancelar").click(function(){
+        cont = 0;
+        fila1 = 0;
+        asiento1 = 0;
+        fila2 = 0;
+        asiento2 = 0;
+        $(".asiento").fadeIn('slow');
+        $("#1fila").val(fila1);
+        $("#1asiento").val("");           
+        $("#2fila").val("");
+        $("#2asiento").val("");
+    });
+
+    function guardar(){
+
+      if (cant == 1) {
+        $('#2fila').remove();
+        $('#2asiento').remove();
+      }
+
+        var data = $("#conform").serializeArray();
+        $.ajax({
+            type: 'POST',
+            data: data,
+            url: 'index.php/Asiento/setAsiento', 
+            success: function(result){
+                            
+                    $('#confirmar').modal('hide');
+                  $('#ubicacion').empty();
+                    $("#ubicacion").load("<?php echo base_url(); ?>/Asiento/index/");
+                            
+                        },
+            error: function(result){
+                        // WaitingClose();
+                        alert("Ha habido un error de guardado...");
+                    },
+            dataType: 'json'
+        });
+    }
+
+</script>  
+
+<style>
+    .conf{
+        border: none;
+        width: 8%;    
+    }
+    /*.dark{
+        background-color: red;
+    }*/
+    .ref{margin-left: 15px;}
+    
+    #confirmar{
+        background-color: #fff !important;
+        color: #000;    }
+</style>
+  <!--  Modal Guardar -->
+  <div class="modal fade" id="confirmar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Confirmar</h4> 
+        </div>
+        <div class="modal-body" id="modalBodydestAgre">
+            <p>Las butacas seleccionadas son: </p>
+            <form id="conform">
+                <label for="1fila">Fila: </label>
+                <input class="conf" type="text" name="1fila" id="1fila">
+                <label for="1asiento">Asiento: </label>
+                <input class="conf" type="text" name="1asiento" id="1asiento"> </br>
+                <label for="2fila">Fila: </label>
+                <input class="conf" type="text" name="2fila" id="2fila">
+                <label for="2asiento">Asiento: </label>
+                <input class="conf" type="text" name="2asiento" id="2asiento"> 
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelar" onclick="">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardar()" 
+          id="btnSavedest">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- /  Modal Agregar Destino-->

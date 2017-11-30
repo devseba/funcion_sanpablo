@@ -1,0 +1,111 @@
+	<div id="formulario">
+			<div class="container">
+				<div id="preins">
+					
+					<div class="row">
+						<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12"> <!--cambio -->
+								
+							<h5 id="titpreins">Retirar Entradas</h5>
+							<a id="btn-inicio"  href="<?php echo base_url('inicio'); ?>">
+								<img src="<?php echo base_url('assets/img/izquierda.png')?>" alt="" width=""/>
+								Inicio
+							</a>
+							<div class="cf" id="cajaform">
+								
+								<div class="row">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										<p class="blacktxt">Las entradas se pueden retirar desde el 20 de Mayo hasta el 2 de junio en los siguientes puntos de entrega:</p>
+										<div class="vs"></div>
+									</div>
+								</div>
+								<div class="row">
+							
+									<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+										
+										<ul>
+											<li><strong>Sanatorio Argentino</strong></li>
+									        <li class="active"><a data-toggle="tab" href="#sectionA">San Luis 432 Oeste de 13 a 17 hs.</a></li> 
+									     <!--   <li><a data-toggle="tab" href="#sectionB">San Luis 433 Oeste de 8 a 13 hs.</a></li>-->
+									        <li><a data-toggle="tab" href="#sectionC">Santa Fe 263 Este de 8 a 14 hs.</a></li>
+											<li><strong>OSDE Filial San Juan</strong></li>
+									        <li><a data-toggle="tab" href="#sectionD">General Paz 279 Oeste de 8 a 17 hs.</a></li>
+										</ul>
+										
+										
+									</div>
+									
+									<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+									
+										
+									    <div class="tab-content">
+									        <div id="sectionA" class="tab-pane fade in active">
+									            <style>.embed-container { position: relative; padding-bottom: 90.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3400.6471898093155!2d-68.53472258474679!3d-31.53384868136511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9681402c26c01aed%3A0xe6b427d29d778da7!2sSanatorio+Argentino!5e0!3m2!1ses-419!2sar!4v1461763557572' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+									        </div>
+									        <div id="sectionB" class="tab-pane fade">
+									            <style>.embed-container { position: relative; padding-bottom: 90.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3400.6551219521143!2d-68.53467988474672!3d-31.533630881365173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9681402c261d1229%3A0x59d0caf35e6a3c8e!2sCalle+San+Luis+Oeste+433%2C+J5400ANI+San+Juan!5e0!3m2!1ses-419!2sar!4v1461768185461' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+									        </div>
+									        <div id="sectionC" class="tab-pane fade">
+									            <style>.embed-container { position: relative; padding-bottom: 90.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3400.4644929171727!2d-68.52407168474657!3d-31.53886478136357!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96816a9d2274b6cb%3A0x24b8c3f7c8e68fc3!2sSta+Fe+Este+263%2C+J5402AAE+San+Juan!5e0!3m2!1ses-419!2sar!4v1461768265601' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+									        </div>
+									        <div id="sectionD" class="tab-pane fade">
+									            <style>.embed-container { position: relative; padding-bottom: 90.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3400.355662226096!2d-68.53156098474649!3d-31.541852481362554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96814026f369a5db%3A0x8694067adb69d390!2sGral.+Jos%C3%A9+Mar%C3%ADa+Paz+Oeste+279%2C+J5402AJE+San+Juan!5e0!3m2!1ses-419!2sar!4v1461768318626' width='600' height='450' frameborder='0' style='border:0' allowfullscreen></iframe></div>
+									        </div>
+									    </div>
+										
+										
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										<div class="vs"></div>
+										<p id="ubicaciones">
+											<img src="<?php echo base_url('assets/img/ubicaciones.png')?>" alt="" width=""/>
+											<span>Las ubicaciones no son numeradas.</span>
+										</p>
+									</div>
+								</div>
+								
+								
+							</div>
+							
+						</div>
+						
+						<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+							
+							<div id="formtxt">
+								<section>
+									<h1 data-wow-delay="0.5s" class="wow fadeInUp">Dr. Facundo Manes</h1>
+									<h2 data-wow-delay="0.75s" class="wow fadeInUp">Innovaci&oacute;n y Creatividad</h2>
+									<h3 data-wow-delay="1s" class="wow fadeInUp">Claves del Futuro</h3>
+									<div data-wow-delay="1.25s" class="clock wow fadeInUp"></div>
+									<div data-wow-delay="1.5s" class="wow fadeInUp" id="fecha">
+										<strong>03/06 &middot; 19 hs.</strong>
+										<span>Estadio Cerrado Aldo Cantoni</span>
+									</div>
+								</section>
+							</div>
+							
+						</div>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-lg-10 col-lg-offset-2 col-md-12 col-md-offset-0 col-sm-12 col-xs-12">
+					
+					
+						<div id="auspician">
+							Auspician:
+							<a class="wow fadeInUp"><img src="<?php echo base_url('assets/img/logo-gobierno-de-san-juan.png')?>" alt="Gobierno de San Juan" title="Gobierno de San Juan" height="60"/></a>
+							<img class="wow fadeIn hidden-xs" src="<?php echo base_url('assets/img/divisor.jpg')?>" alt="" height="60"/>
+							<a data-wow-delay="0.5s" class="wow fadeInUp"><img src="<?php echo base_url('assets/img/secretaria-de-deportes.jpg')?>" alt="Secretar&iacute;a de Deportes" title="Gobierno de San Juan" height="60"/></a>
+							<a data-wow-delay="0.75s" class="wow fadeInUp"><img src="<?php echo base_url('assets/img/ministerio-de-salud-publica.jpg')?>" alt="Ministerio de Salud P&uacute;blica" title="Ministerio de Salud P&uacute;blica" height="60"/></a>
+							<a data-wow-delay="1s" class="wow fadeInUp"><img src="<?php echo base_url('assets/img/ministerio-de-educacion.jpg')?>" alt="Ministerio de Educaci&oacute;n" title="Ministerio de Educaci&oacute;n" height="60"/></a>
+							<section class="text-center">
+								<a data-wow-delay="1.25s" class="wow fadeInUp"><img src="<?php echo base_url('assets/img/logo-osde.jpg')?>" alt="OSDE" title="OSDE" height="78"/></a>
+								<a data-wow-delay="1.5s" class="wow fadeInUp"><img src="<?php echo base_url('assets/img/logo-banco-san-juan.jpg')?>" alt="Banco San Juan" title="Banco San Juan" height="78"/></a>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>

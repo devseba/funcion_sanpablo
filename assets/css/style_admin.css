@@ -1,0 +1,7 @@
+.pbody{
+	margin-top:15px; 
+}
+
+.display thead,tbody>tr{
+	width: 20%;
+}
